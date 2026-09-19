@@ -16,6 +16,7 @@ typedef struct {
     long        last_sequence;               /* last UDP seq seen; -1 = none */
     long        datagrams_received;
     long        datagrams_lost;              /* gaps detected in seq */
+    long        resyncs;                     /* node restarts or duplicated ids */
 } TelemetryNode;
 
 typedef struct {
@@ -37,7 +38,7 @@ typedef struct {
 void registry_init(void);
 int  registry_register_node(const char *node_id);                        /* 0 ok, -1 no room */
 int  registry_record_telemetry(const char *node_id, long sequence,
-                               const Measurement *values, int count);    /* 0 ok, -1 unknown node */
+                               const Measurement *values, int count);    /* 0 ok, -1 no room for the node */
 int  node_is_active(const TelemetryNode *node, time_t now);
 void registry_copy_snapshot(RegistrySnapshot *out);                      /* copy under the mutex */
 

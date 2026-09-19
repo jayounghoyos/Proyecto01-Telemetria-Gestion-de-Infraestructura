@@ -17,6 +17,7 @@
 #define MAX_NODES       64
 #define MAX_ALERTS      128  /* ring buffer */
 #define ACTIVE_TIMEOUT  15   /* seconds without telemetry => node inactive */
+#define MAX_SEQUENCE_GAP 100 /* a bigger gap in seq is a node restart, not a loss */
 #define TCP_BACKLOG     16
 
 /* Alert thresholds: value > threshold => <VAR>_HIGH */

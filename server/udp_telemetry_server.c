@@ -37,7 +37,7 @@ void *udp_telemetry_server(void *listening_fd) {
         }
         long sequence = strtol(message.args[1], NULL, 10);
         if (registry_record_telemetry(message.args[0], sequence, values, value_count) < 0)
-            printf("[udp] telemetry from unregistered node: %s\n", message.args[0]);
+            printf("[udp] no room to register node %s\n", message.args[0]);
     }
     return NULL;
 }
