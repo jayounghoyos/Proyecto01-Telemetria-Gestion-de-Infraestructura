@@ -1,0 +1,10 @@
+services:
+  telemetry-server:
+    build: .
+    image: telemetry-server:latest
+    container_name: telemetry-server
+    ports:
+      - "5000:5000/tcp"   # operator commands and node registration
+      - "5001:5001/udp"   # telemetry (the /udp suffix matters)
+      - "8080:8080/tcp"   # web status page
+    restart: unless-stopped

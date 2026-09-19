@@ -1,0 +1,7 @@
+.git
+client/logs
+server/*.o
+server/telemetry_server
+docs
+*.pdf
+clases(nocomit)
