@@ -22,6 +22,14 @@ Python clients you can try it with netcat:
     printf 'GET_STATUS\nGET_ALERTS\nBYE\n' | nc -q1 localhost 5000
     curl localhost:8080/status
 
+## Running the server in Docker
+
+    docker compose up -d --build
+    docker compose logs -f
+
+The image is built in two stages (gcc to compile, debian-slim to run) and publishes
+5000/tcp, 5001/udp and 8080/tcp. The container restarts on its own if the machine reboots.
+
 ## Running the clients
 
 Python 3.8 or newer. The server name comes from --host or the TELEP_SERVER_HOST variable
