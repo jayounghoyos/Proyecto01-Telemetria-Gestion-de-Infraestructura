@@ -4,6 +4,7 @@ ASCII text messages: fields separated by '|' and terminated by '\\n'.
 Measurements travel as NAME=value pairs separated by ';'.
 """
 import os
+import select
 import socket
 
 DEFAULT_HOST = os.environ.get("TELEP_SERVER_HOST", "localhost")
@@ -12,6 +13,7 @@ UDP_PORT = 5001
 SEPARATOR = "|"
 MAX_LINE = 256
 END_OF_LIST = "END"
+ALERT_PREFIX = "ALERT" + SEPARATOR
 DEFAULT_TIMEOUT_SECONDS = 5.0
 
 
@@ -54,6 +56,8 @@ class TelepConnection:
     """Persistent TCP connection to the server. Sends a command and reads the reply.
 
     List replies (GET_NODES, GET_ALERTS) span several lines and end with END.
+    After SUBSCRIBE the server can push ALERT|... lines at any moment; they are
+    kept apart in pending_alerts so they never get mixed with a command reply.
     """
 
     def __init__(self, hostname=DEFAULT_HOST, port=TCP_PORT, timeout=DEFAULT_TIMEOUT_SECONDS):
@@ -62,6 +66,7 @@ class TelepConnection:
         self.timeout = timeout
         self.socket = None
         self.reader = None
+        self.pending_alerts = []
 
     def connect(self):
         server_ip = resolve_server_address(self.hostname)
@@ -81,20 +86,42 @@ class TelepConnection:
             self.socket.close()                                            # close
             self.socket = None
 
+    def read_line(self):
+        """Reads one line from the server; pushed alerts are stored apart and skipped."""
+        while True:
+            line = self.reader.readline()                                  # receive
+            if not line:
+                raise ConnectionError("the server closed the connection")
+            if not line.startswith(ALERT_PREFIX):
+                return line.rstrip("\r\n")
+            self.pending_alerts.append(decode_message(line))
+
     def request(self, command, *fields):
         """Sends a command and returns the list of decoded reply lines."""
         self.socket.sendall(encode_message(command, *fields))              # send
-        first_line = self.reader.readline()                                # receive
-        if not first_line:
-            raise ConnectionError("the server closed the connection")
-        response = [decode_message(first_line)]
+        response = [decode_message(self.read_line())]
         if command in ("GET_NODES", "GET_ALERTS") and response[0][0] == "OK":
             while True:
-                line = self.reader.readline()
-                if not line or line.rstrip("\r\n") == END_OF_LIST:
+                line = self.read_line()
+                if line == END_OF_LIST:
                     break
                 response.append(decode_message(line))
         return response
+
+    def subscribe(self):
+        """Asks the server to push new alerts on this connection."""
+        return self.request("SUBSCRIBE")[0][0] == "OK"
+
+    def take_alerts(self):
+        """Returns and clears the pushed alerts, reading first whatever is waiting on the socket."""
+        while select.select([self.socket], [], [], 0)[0]:
+            line = self.reader.readline()
+            if not line:
+                break
+            if line.startswith(ALERT_PREFIX):
+                self.pending_alerts.append(decode_message(line))
+        alerts, self.pending_alerts = self.pending_alerts, []
+        return alerts
 
     def __enter__(self):
         self.connect()
