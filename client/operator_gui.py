@@ -40,6 +40,8 @@ class OperatorWindow:
         ttk.Button(toolbar, text="GET_LAST", command=self.query_single_node).pack(side="left", padx=4)
         self.status_label = ttk.Label(toolbar, text="", foreground="gray")
         self.status_label.pack(side="right")
+        self.last_alert_label = ttk.Label(self.root, text="", foreground="red", padding=(8, 0))
+        self.last_alert_label.pack(fill="x")
 
         panes = ttk.PanedWindow(self.root, orient="vertical")
         panes.pack(fill="both", expand=True, padx=6, pady=6)
@@ -76,6 +78,10 @@ class OperatorWindow:
             return None
 
     def refresh(self):
+        pushed = self.connection.take_alerts()
+        if pushed:
+            _, node_id, alert_type, value = pushed[-1]
+            self.last_alert_label.config(text=f"!! ALERT received: {node_id} {alert_type} {value}")
         status = self.request("GET_STATUS")
         if status is None:
             return
@@ -121,6 +127,7 @@ def main():
     connection = telep.TelepConnection(args.host, args.port)
     try:
         connection.connect()
+        connection.subscribe()
     except OSError as error:
         print(f"could not connect to {args.host}:{args.port}: {error}", file=sys.stderr)
         sys.exit(1)

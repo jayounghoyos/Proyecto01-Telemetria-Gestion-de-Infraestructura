@@ -96,6 +96,8 @@ def main():
         print(f"could not connect to {args.host}:{args.port}: {error}", file=sys.stderr)
         sys.exit(1)
     print(f"connected to {args.host} ({server_ip}:{args.port})")
+    if connection.subscribe():
+        print("subscribed: new alerts arrive on this connection (ALERT|...)")
 
     actions = {
         "1": show_nodes,
@@ -107,6 +109,8 @@ def main():
     }
     try:
         while True:
+            for _, node_id, alert_type, value in connection.take_alerts():
+                print(f"  !! ALERT received: {node_id} {alert_type} {value}")
             print(MENU)
             choice = input("option: ").strip()
             if choice == "0":

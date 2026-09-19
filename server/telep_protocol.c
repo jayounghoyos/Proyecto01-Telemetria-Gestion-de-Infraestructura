@@ -66,6 +66,7 @@ void build_error_response(char *out, size_t out_size, int error_code) {
         case ERR_UNKNOWN_CMD:  error_text = "UNKNOWN_CMD";  break;
         case ERR_UNKNOWN_NODE: error_text = "UNKNOWN_NODE"; break;
         case ERR_TOO_LONG:     error_text = "TOO_LONG";     break;
+        case ERR_SERVER_FULL:  error_text = "SERVER_FULL";  break;
     }
     snprintf(out, out_size, "ERR|%d|%s", error_code, error_text);
 }
