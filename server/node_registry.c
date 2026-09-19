@@ -18,22 +18,35 @@ static TelemetryNode *find_node(const char *node_id) {
     return NULL;
 }
 
+/* Creates the node in the first free slot. Requires the mutex. NULL if there is no room. */
+static TelemetryNode *create_node(const char *node_id) {
+    for (int i = 0; i < MAX_NODES; i++) {
+        TelemetryNode *slot = &registry.nodes[i];
+        if (slot->in_use) continue;
+        memset(slot, 0, sizeof *slot);
+        strcpy(slot->node_id, node_id);
+        slot->in_use = 1;
+        slot->last_sequence = -1;
+        return slot;
+    }
+    return NULL;
+}
+
+/* A repeated HELLO means the node restarted: its sequence and loss
+ * counters go back to zero so STATS reflects only the current session. */
 int registry_register_node(const char *node_id) {
     pthread_mutex_lock(&registry_mutex);
     int result = 0;
-    if (!find_node(node_id)) {
+    TelemetryNode *existing = find_node(node_id);
+    if (existing) {
+        existing->last_sequence = -1;
+        existing->datagrams_received = 0;
+        existing->datagrams_lost = 0;
+        printf("[registry] node re-registered: %s\n", node_id);
+    } else if (create_node(node_id)) {
+        printf("[registry] node registered: %s\n", node_id);
+    } else {
         result = -1;
-        for (int i = 0; i < MAX_NODES; i++) {
-            TelemetryNode *slot = &registry.nodes[i];
-            if (slot->in_use) continue;
-            memset(slot, 0, sizeof *slot);
-            strcpy(slot->node_id, node_id);
-            slot->in_use = 1;
-            slot->last_sequence = -1;
-            printf("[registry] node registered: %s\n", node_id);
-            result = 0;
-            break;
-        }
     }
     pthread_mutex_unlock(&registry_mutex);
     return result;
@@ -82,10 +95,12 @@ int registry_record_telemetry(const char *node_id, long sequence, const Measurem
         return -1;
     }
 
-    /* UDP loss detection: a jump in seq means datagrams that never arrived. */
-    if (node->last_sequence >= 0 && sequence > node->last_sequence + 1)
-        node->datagrams_lost += sequence - node->last_sequence - 1;
-    if (sequence > node->last_sequence) node->last_sequence = sequence;
+    /* UDP loss = a small gap in seq. A huge jump or a step back is not a loss:
+     * the node restarted or two processes share the id; count it as a resync. */
+    long gap = node->last_sequence >= 0 ? sequence - node->last_sequence - 1 : 0;
+    if (gap > 0 && gap <= MAX_SEQUENCE_GAP) node->datagrams_lost += gap;
+    else if (gap > MAX_SEQUENCE_GAP || sequence <= node->last_sequence) node->resyncs++;
+    node->last_sequence = sequence;
     node->datagrams_received++;
     node->last_seen = time(NULL);
 

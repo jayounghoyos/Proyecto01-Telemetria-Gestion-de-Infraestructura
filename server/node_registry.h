@@ -16,6 +16,7 @@ typedef struct {
     long        last_sequence;               /* last UDP seq seen; -1 = none */
     long        datagrams_received;
     long        datagrams_lost;              /* gaps detected in seq */
+    long        resyncs;                     /* node restarts or duplicated ids */
 } TelemetryNode;
 
 typedef struct {
