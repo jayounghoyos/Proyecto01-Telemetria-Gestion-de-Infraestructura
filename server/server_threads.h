@@ -3,4 +3,5 @@
 /* Each server runs in its own thread. The argument points to the fd created in main. */
 void *udp_telemetry_server(void *listening_fd);
 void *tcp_command_server(void *listening_fd);
+void *http_status_server(void *listening_fd);
 #endif

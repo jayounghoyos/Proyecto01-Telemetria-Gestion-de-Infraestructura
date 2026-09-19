@@ -77,3 +77,10 @@ An error never closes the connection; the client can keep sending commands.
     < ERR|102|UNKNOWN_NODE
     > BYE
     < OK|BYE
+
+## HTTP (port 8080, read only)
+
+The status page is served over plain HTTP so a browser can open it. GET / returns an HTML
+page; GET /status, /nodes and /alerts return the same information as GET_STATUS, GET_NODES
+and GET_ALERTS in JSON. Anything else returns 404. There is no write access over HTTP; all
+changes go through TELEP.
