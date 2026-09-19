@@ -75,7 +75,7 @@ static int was_anomalous(const TelemetryNode *node, const char *variable_name) {
     return 0;
 }
 
-static void add_alert(const char *node_id, const char *variable_name, const char *suffix, double value) {
+static Alert *add_alert(const char *node_id, const char *variable_name, const char *suffix, double value) {
     Alert *alert = &registry.alerts[registry.total_alerts % MAX_ALERTS];
     alert->timestamp = time(NULL);
     strcpy(alert->node_id, node_id);
@@ -83,9 +83,11 @@ static void add_alert(const char *node_id, const char *variable_name, const char
     alert->value = value;
     registry.total_alerts++;
     printf("[alert] %s %s %.2f\n", node_id, alert->alert_type, value);
+    return alert;
 }
 
-int registry_record_telemetry(const char *node_id, long sequence, const Measurement *values, int count) {
+int registry_record_telemetry(const char *node_id, long sequence, const Measurement *values, int count, Alert *new_alerts) {
+    int new_alert_count = 0;
     pthread_mutex_lock(&registry_mutex);
     registry.datagrams_total++;
     TelemetryNode *node = find_node(node_id);
@@ -112,14 +114,16 @@ int registry_record_telemetry(const char *node_id, long sequence, const Measurem
     for (int i = 0; i < count; i++) {
         const Measurement *current = &values[i];
         if (is_anomalous_value(current) && !was_anomalous(node, current->name)) {
-            if (strcmp(current->name, "STATUS") == 0) add_alert(node_id, "STATUS", "FAIL", 0);
-            else add_alert(node_id, current->name, "HIGH", current->value);
+            Alert *alert = strcmp(current->name, "STATUS") == 0
+                ? add_alert(node_id, "STATUS", "FAIL", 0)
+                : add_alert(node_id, current->name, "HIGH", current->value);
+            new_alerts[new_alert_count++] = *alert;
         }
     }
     node->measurement_count = count;
     memcpy(node->measurements, values, sizeof(Measurement) * (size_t)count);
     pthread_mutex_unlock(&registry_mutex);
-    return 0;
+    return new_alert_count;
 }
 
 int node_is_active(const TelemetryNode *node, time_t now) {

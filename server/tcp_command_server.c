@@ -1,4 +1,5 @@
 #include "server_threads.h"
+#include "alert_subscribers.h"
 #include "node_registry.h"
 #include "response_format.h"
 #include "socket_helpers.h"
@@ -93,6 +94,11 @@ static int handle_command(ClientConnection *client, const char *line) {
     if (strcmp(command, "GET_STATUS") == 0) { reply_status(client); return 0; }
     if (strcmp(command, "GET_NODES") == 0)  { reply_node_list(client); return 0; }
     if (strcmp(command, "GET_ALERTS") == 0) { reply_alert_list(client); return 0; }
+    if (strcmp(command, "SUBSCRIBE") == 0) {
+        if (subscribers_add(client->socket_fd) < 0) reply_error(client->socket_fd, ERR_SERVER_FULL);
+        else send_text_line(client->socket_fd, "OK|SUBSCRIBED");
+        return 0;
+    }
 
     /* The remaining commands need a valid node_id as first argument. */
     if (!first_arg || !is_valid_node_id(first_arg)) {
@@ -101,7 +107,7 @@ static int handle_command(ClientConnection *client, const char *line) {
         return 0;
     }
     if (strcmp(command, "HELLO") == 0) {
-        if (registry_register_node(first_arg) < 0) send_text_line(client->socket_fd, "ERR|104|SERVER_FULL");
+        if (registry_register_node(first_arg) < 0) reply_error(client->socket_fd, ERR_SERVER_FULL);
         else { printf("[tcp] %s registers node %s\n", client->peer_text, first_arg); send_text_line(client->socket_fd, "OK|REGISTERED"); }
         return 0;
     }
@@ -124,6 +130,7 @@ static void *serve_client(void *connection) {
         if (handle_command(client, line)) break;
     }
     printf("[tcp] disconnected %s\n", client->peer_text);
+    subscribers_remove(client->socket_fd);
     close(client->socket_fd);
     free(client);
     return NULL;

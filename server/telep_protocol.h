@@ -24,6 +24,7 @@ typedef struct {
 #define ERR_UNKNOWN_CMD  101
 #define ERR_UNKNOWN_NODE 102
 #define ERR_TOO_LONG     103
+#define ERR_SERVER_FULL  104
 
 int  parse_message(const char *line, ParsedMessage *message);             /* 0 ok, -1 empty line */
 int  parse_measurements(const char *field, Measurement *out, int max);    /* count, -1 invalid format */

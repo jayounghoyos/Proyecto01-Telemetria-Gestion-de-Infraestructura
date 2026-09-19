@@ -1,4 +1,5 @@
 #include "server_threads.h"
+#include "alert_subscribers.h"
 #include "node_registry.h"
 #include "socket_helpers.h"
 #include "telep_protocol.h"
@@ -36,8 +37,10 @@ void *udp_telemetry_server(void *listening_fd) {
             continue;
         }
         long sequence = strtol(message.args[1], NULL, 10);
-        if (registry_record_telemetry(message.args[0], sequence, values, value_count) < 0)
-            printf("[udp] no room to register node %s\n", message.args[0]);
+        Alert new_alerts[MAX_VARS];
+        int new_alert_count = registry_record_telemetry(message.args[0], sequence, values, value_count, new_alerts);
+        if (new_alert_count < 0) printf("[udp] no room to register node %s\n", message.args[0]);
+        for (int i = 0; i < new_alert_count; i++) subscribers_broadcast(&new_alerts[i]);
     }
     return NULL;
 }

@@ -37,8 +37,10 @@ typedef struct {
 
 void registry_init(void);
 int  registry_register_node(const char *node_id);                        /* 0 ok, -1 no room */
+/* Records the measurement and leaves the alerts it generated in new_alerts (room for
+ * MAX_VARS). Returns how many there were, or -1 if there is no room for the node. */
 int  registry_record_telemetry(const char *node_id, long sequence,
-                               const Measurement *values, int count);    /* 0 ok, -1 no room for the node */
+                               const Measurement *values, int count, Alert *new_alerts);
 int  node_is_active(const TelemetryNode *node, time_t now);
 void registry_copy_snapshot(RegistrySnapshot *out);                      /* copy under the mutex */
 
