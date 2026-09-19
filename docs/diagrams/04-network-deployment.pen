@@ -1,0 +1,930 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "it8Ex",
+      "x": 0,
+      "y": 0,
+      "name": "Figure 4 - Network and deployment",
+      "clip": true,
+      "width": 1100,
+      "height": 560,
+      "fill": "#F8FAFC",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "J6X0nW",
+          "x": 40,
+          "y": 26,
+          "name": "Title",
+          "fill": "#0F172A",
+          "content": "Figure 4. Network and deployment on AWS Academy Learner Lab",
+          "fontFamily": "Inter",
+          "fontSize": 22,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "rWa8t",
+          "x": 40,
+          "y": 56,
+          "name": "Subtitle",
+          "fill": "#64748B",
+          "content": "The public IP changes on every instance start; the DNS name re-points itself and the clients never change",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "nBKk6",
+          "x": 40,
+          "y": 110,
+          "name": "PC",
+          "width": 230,
+          "height": 150,
+          "fill": "#FFFFFF",
+          "cornerRadius": 12,
+          "stroke": "#E2E8F0",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "Awm4d",
+              "x": 16,
+              "y": 16,
+              "name": "pc title",
+              "fill": "#334155",
+              "content": "Client machine (any network)",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "j9W1oQ",
+              "x": 16,
+              "y": 40,
+              "name": "pc l0",
+              "fill": "#475569",
+              "content": "Private IP behind NAT",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "e95CvE",
+              "x": 16,
+              "y": 60,
+              "name": "pc l1",
+              "fill": "#475569",
+              "content": "Server known only by its name:",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "EQbug",
+              "x": 16,
+              "y": 80,
+              "name": "pc l2",
+              "fill": "#475569",
+              "content": "  telemetria-eafit.duckdns.org",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "zSkHi",
+              "x": 16,
+              "y": 100,
+              "name": "pc l3",
+              "fill": "#475569",
+              "content": "node.py · operator_cli.py · browser",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "VOf20",
+              "x": 16,
+              "y": 120,
+              "name": "pc l4",
+              "fill": "#475569",
+              "content": "Wireshark on the Wi-Fi interface",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lh9ym",
+          "x": 330,
+          "y": 110,
+          "name": "DuckDNS",
+          "width": 200,
+          "height": 90,
+          "fill": "#FFFFFF",
+          "cornerRadius": 12,
+          "stroke": "#E2E8F0",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "icon",
+              "id": "AZwzP",
+              "x": 14,
+              "y": 14,
+              "name": "dns icon",
+              "width": 24,
+              "height": 24,
+              "icon": "map-pin",
+              "library": "lucide",
+              "fill": "#F59E0B"
+            },
+            {
+              "type": "text",
+              "id": "d2dV7w",
+              "x": 48,
+              "y": 16,
+              "name": "dns title",
+              "fill": "#334155",
+              "content": "DuckDNS",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "bJrCT",
+              "x": 48,
+              "y": 34,
+              "name": "dns name",
+              "fill": "#64748B",
+              "content": "telemetria-eafit.duckdns.org",
+              "fontFamily": "Inter",
+              "fontSize": 10,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "eow6p",
+              "x": 16,
+              "y": 64,
+              "name": "dns rec",
+              "fill": "#64748B",
+              "content": "A → 13.218.65.204 (today)",
+              "fontFamily": "Inter",
+              "fontSize": 10,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "rNw7m",
+          "x": 0,
+          "y": 0,
+          "name": "pc-dns",
+          "geometry": "M276 150l48 0",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            560
+          ],
+          "width": 1100,
+          "height": 560,
+          "stroke": "#94A3B8",
+          "strokeWidth": 1.5,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "N3dNV",
+          "x": 317,
+          "y": 144,
+          "name": "d1",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#94A3B8",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "path",
+          "id": "d3Q45e",
+          "x": 270,
+          "y": 144,
+          "name": "d2",
+          "geometry": "M0 6l13-6 0 12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#94A3B8",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "text",
+          "id": "znwAS",
+          "x": 278,
+          "y": 134,
+          "name": "dns53",
+          "fill": "#64748B",
+          "content": "DNS 53",
+          "fontFamily": "Inter",
+          "fontSize": 9,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "JeUOy",
+          "x": 580,
+          "y": 100,
+          "name": "AWS",
+          "width": 480,
+          "height": 440,
+          "fill": "#FFF7ED",
+          "cornerRadius": 12,
+          "stroke": "#FDBA74",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "JcoWV",
+              "x": 20,
+              "y": 12,
+              "name": "aws badge",
+              "fill": "#F97316",
+              "cornerRadius": 6,
+              "padding": [
+                4,
+                12
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "W7CpVC",
+                  "name": "aws label",
+                  "fill": "#FFFFFF",
+                  "content": "aws",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "Yxfjg",
+              "x": 100,
+              "y": 16,
+              "name": "region",
+              "fill": "#7C2D12",
+              "content": "Region us-east-1 · default VPC 172.31.0.0/16",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "uy2NN",
+              "x": 20,
+              "y": 50,
+              "name": "SG",
+              "width": 440,
+              "height": 110,
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "stroke": "#FDBA74",
+              "strokeWidth": 1,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "AnGPE",
+                  "x": 16,
+                  "y": 12,
+                  "name": "sg title",
+                  "fill": "#9A3412",
+                  "content": "Security group telemetry-sg (inbound)",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "YBAZa",
+                  "x": 16,
+                  "y": 34,
+                  "name": "sg l0",
+                  "fill": "#334155",
+                  "content": "22/tcp · SSH · administration (labsuser.pem, user ubuntu)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "JvUym",
+                  "x": 16,
+                  "y": 52,
+                  "name": "sg l1",
+                  "fill": "#334155",
+                  "content": "5000/tcp · TELEP commands and ALERT · 0.0.0.0/0",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "aoOKp",
+                  "x": 16,
+                  "y": 70,
+                  "name": "sg udp",
+                  "fill": "#B45309",
+                  "content": "5001/udp · TELEP telemetry · 0.0.0.0/0  (UDP, not TCP!)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "OMk4L",
+                  "x": 16,
+                  "y": 88,
+                  "name": "sg http",
+                  "fill": "#334155",
+                  "content": "8080/tcp · HTTP · 0.0.0.0/0",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "e58Y1",
+              "x": 20,
+              "y": 180,
+              "name": "EC2",
+              "width": 440,
+              "height": 240,
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "stroke": "#FDBA74",
+              "strokeWidth": 1,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kyo3I",
+                  "x": 16,
+                  "y": 12,
+                  "name": "inst title",
+                  "fill": "#9A3412",
+                  "content": "EC2 t2.micro · Ubuntu · private IP 172.31.84.220 · dynamic public IP",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "frame",
+                  "id": "GEzgA",
+                  "x": 16,
+                  "y": 36,
+                  "name": "duckdns svc",
+                  "width": 196,
+                  "height": 76,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 12,
+                  "stroke": "#CBD5E1",
+                  "strokeWidth": 1,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HOTza",
+                      "x": 10,
+                      "y": 8,
+                      "name": "svc1 t",
+                      "fill": "#0F172A",
+                      "content": "systemd · duckdns.service",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "IYNqC",
+                      "x": 10,
+                      "y": 26,
+                      "name": "svc1 l0",
+                      "fill": "#334155",
+                      "content": "on boot: reads public IP (IMDSv2)",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "zkGsl",
+                      "x": 10,
+                      "y": 42,
+                      "name": "svc1 l1",
+                      "fill": "#334155",
+                      "content": "and updates DuckDNS with the token",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vpQar",
+                      "x": 10,
+                      "y": 58,
+                      "name": "svc1 l2",
+                      "fill": "#334155",
+                      "content": "from /etc/duckdns.conf",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "LjkZB",
+                  "x": 228,
+                  "y": 36,
+                  "name": "docker svc",
+                  "width": 196,
+                  "height": 76,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 12,
+                  "stroke": "#CBD5E1",
+                  "strokeWidth": 1,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "A6LkGN",
+                      "x": 10,
+                      "y": 8,
+                      "name": "svc2 t",
+                      "fill": "#0F172A",
+                      "content": "systemd · docker",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ijpFf",
+                      "x": 10,
+                      "y": 26,
+                      "name": "svc2 l0",
+                      "fill": "#334155",
+                      "content": "enable --now",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ngsKZ",
+                      "x": 10,
+                      "y": 42,
+                      "name": "svc2 l1",
+                      "fill": "#334155",
+                      "content": "container with",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "uEBDv",
+                      "x": 10,
+                      "y": 58,
+                      "name": "svc2 l2",
+                      "fill": "#334155",
+                      "content": "restart: unless-stopped",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KCo5k",
+                  "x": 16,
+                  "y": 124,
+                  "name": "container",
+                  "width": 408,
+                  "height": 100,
+                  "fill": "#EFF6FF",
+                  "cornerRadius": 12,
+                  "stroke": "#60A5FA",
+                  "strokeWidth": 1,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "T29yn",
+                      "x": 12,
+                      "y": 10,
+                      "name": "docker icon",
+                      "width": 22,
+                      "height": 22,
+                      "icon": "container",
+                      "library": "lucide",
+                      "fill": "#2496ED"
+                    },
+                    {
+                      "type": "text",
+                      "id": "C8b7ny",
+                      "x": 42,
+                      "y": 12,
+                      "name": "dk title",
+                      "fill": "#1E3A8A",
+                      "content": "telemetry-server (Docker, /opt/telemetria)",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "izoWO",
+                      "x": 12,
+                      "y": 40,
+                      "name": "dk l0",
+                      "fill": "#1E40AF",
+                      "content": "-p 5000:5000/tcp  -p 5001:5001/udp  -p 8080:8080/tcp",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "K1LUG",
+                      "x": 12,
+                      "y": 57,
+                      "name": "dk l1",
+                      "fill": "#1E40AF",
+                      "content": "./telemetry_server (C) + web/index.html",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "WhbpG",
+                      "x": 12,
+                      "y": 74,
+                      "name": "dk l2",
+                      "fill": "#1E40AF",
+                      "content": "deployed with deploy/deploy.sh (rsync + docker compose up --build)",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "LVn2y",
+          "x": 0,
+          "y": 0,
+          "name": "f1",
+          "geometry": "M270 200c130 0 180 20 326 20",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            560
+          ],
+          "width": 1100,
+          "height": 560,
+          "stroke": "#2563EB",
+          "strokeWidth": 2,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "pkaG0",
+          "x": 587,
+          "y": 214,
+          "name": "fa1",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#2563EB",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "path",
+          "id": "uNRVj",
+          "x": 0,
+          "y": 0,
+          "name": "f2",
+          "geometry": "M270 215c130 0 180 20 326 20",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            560
+          ],
+          "width": 1100,
+          "height": 560,
+          "stroke": "#D97706",
+          "strokeWidth": 2,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "O9PMP",
+          "x": 587,
+          "y": 229,
+          "name": "fa2",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#D97706",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "path",
+          "id": "L8RLp",
+          "x": 0,
+          "y": 0,
+          "name": "f3",
+          "geometry": "M270 230c130 0 180 20 326 20",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            560
+          ],
+          "width": 1100,
+          "height": 560,
+          "stroke": "#16A34A",
+          "strokeWidth": 2,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "PcKFN",
+          "x": 587,
+          "y": 244,
+          "name": "fa3",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#16A34A",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "text",
+          "id": "BX8vt",
+          "x": 380,
+          "y": 262,
+          "name": "flow note",
+          "fill": "#64748B",
+          "content": "Internet → public IP → security group → published port → container",
+          "fontFamily": "Inter",
+          "fontSize": 10,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "path",
+          "id": "kw3kB",
+          "x": 0,
+          "y": 0,
+          "name": "update",
+          "geometry": "M530 160c30 0 50 170 82 190",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            560
+          ],
+          "width": 1100,
+          "height": 560,
+          "stroke": "#94A3B8",
+          "strokeWidth": 1.5,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "IjX3Z",
+          "x": 530,
+          "y": 154,
+          "name": "ua",
+          "geometry": "M0 6l13-6 0 12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#94A3B8",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "frame",
+          "id": "sYOUB",
+          "x": 40,
+          "y": 300,
+          "name": "Lifecycle",
+          "width": 490,
+          "height": 200,
+          "fill": "#FFFFFF",
+          "cornerRadius": 12,
+          "stroke": "#E2E8F0",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "p11QFo",
+              "x": 16,
+              "y": 16,
+              "name": "lab title",
+              "fill": "#334155",
+              "content": "Instance restart in Learner Lab",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "sKkv0",
+              "x": 16,
+              "y": 42,
+              "name": "lab l0",
+              "fill": "#475569",
+              "content": "Each start assigns a new public IP to the instance.",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "yIKmc",
+              "x": 16,
+              "y": 62,
+              "name": "lab l1",
+              "fill": "#475569",
+              "content": "duckdns.service updates the A record at boot.",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "GZKtg",
+              "x": 16,
+              "y": 82,
+              "name": "lab l2",
+              "fill": "#475569",
+              "content": "docker restarts telemetry-server (unless-stopped).",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "B1eEjk",
+              "x": 16,
+              "y": 102,
+              "name": "lab l3",
+              "fill": "#475569",
+              "content": "Nodes still sending are re-registered from their telemetry.",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "W1hYg",
+              "x": 16,
+              "y": 122,
+              "name": "lab l4",
+              "fill": "#475569",
+              "content": "Clients keep the same hostname; nothing changes on their side.",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "HTdxH",
+              "x": 16,
+              "y": 142,
+              "name": "lab l5",
+              "fill": "#475569",
+              "content": "The instance stops when the 4-hour session ends.",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "pMwTH",
+              "x": 16,
+              "y": 172,
+              "name": "verified",
+              "fill": "#94A3B8",
+              "content": "Observed 2026-09-19: IP changed 34.226.153.93 → 13.218.65.204, no client change.",
+              "fontFamily": "Inter",
+              "fontSize": 10,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fileToken": "f1d15e18-de90-4bd5-9a83-a20cfcf416ce"
+}

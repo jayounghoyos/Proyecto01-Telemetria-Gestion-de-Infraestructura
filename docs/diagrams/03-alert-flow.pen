@@ -1,0 +1,644 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "VV04N",
+      "x": 0,
+      "y": 0,
+      "name": "Figure 3 - Alert flow",
+      "clip": true,
+      "width": 1100,
+      "height": 520,
+      "fill": "#F8FAFC",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "w2MEs",
+          "x": 40,
+          "y": 26,
+          "name": "Title",
+          "fill": "#0F172A",
+          "content": "Figure 3. Alert flow: from the UDP datagram to the operator",
+          "fontFamily": "Inter",
+          "fontSize": 22,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "gfB3h",
+          "x": 40,
+          "y": 56,
+          "name": "Subtitle",
+          "fill": "#64748B",
+          "content": "Real sequence observed in the tests: NODE09 with --spike TEMP=45 (threshold TEMP_MAX = 40 °C)",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "TM5eZ",
+          "x": 60,
+          "y": 90,
+          "name": "Node (Python)",
+          "width": 150,
+          "height": 40,
+          "fill": "#FFFBEB",
+          "cornerRadius": 10,
+          "stroke": "#FCD34D",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Sf9ij",
+              "name": "Node (Python) label",
+              "fill": "#92400E",
+              "content": "Node (Python)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "u7C0Qq",
+          "x": 0,
+          "y": 0,
+          "name": "life 0",
+          "geometry": "M135 130l0 340",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#CBD5E1",
+          "strokeWidth": 1,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "frame",
+          "id": "ohMXp",
+          "x": 300,
+          "y": 90,
+          "name": "UDP thread (C)",
+          "width": 150,
+          "height": 40,
+          "fill": "#FFFBEB",
+          "cornerRadius": 10,
+          "stroke": "#FCD34D",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "NNorF",
+              "name": "UDP thread (C) label",
+              "fill": "#92400E",
+              "content": "UDP thread (C)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "vc7Ni",
+          "x": 0,
+          "y": 0,
+          "name": "life 1",
+          "geometry": "M375 130l0 340",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#CBD5E1",
+          "strokeWidth": 1,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "frame",
+          "id": "Z9mXyN",
+          "x": 540,
+          "y": 90,
+          "name": "node_registry",
+          "width": 150,
+          "height": 40,
+          "fill": "#F1F5F9",
+          "cornerRadius": 10,
+          "stroke": "#CBD5E1",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "w99ZWh",
+              "name": "node_registry label",
+              "fill": "#0F172A",
+              "content": "node_registry",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "ZoUJF",
+          "x": 0,
+          "y": 0,
+          "name": "life 2",
+          "geometry": "M615 130l0 340",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#CBD5E1",
+          "strokeWidth": 1,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "frame",
+          "id": "WUquX",
+          "x": 780,
+          "y": 90,
+          "name": "Operator (Python)",
+          "width": 150,
+          "height": 40,
+          "fill": "#EFF6FF",
+          "cornerRadius": 10,
+          "stroke": "#93C5FD",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "PoTk2",
+              "name": "Operator (Python) label",
+              "fill": "#1E3A8A",
+              "content": "Operator (Python)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "VagCu",
+          "x": 0,
+          "y": 0,
+          "name": "life 3",
+          "geometry": "M855 130l0 340",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#CBD5E1",
+          "strokeWidth": 1,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "WI4HW",
+          "x": 0,
+          "y": 0,
+          "name": "s0",
+          "geometry": "M855 160l-474 0",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#2563EB",
+          "strokeWidth": 2,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "BRzEu",
+          "x": 375,
+          "y": 154,
+          "name": "a0",
+          "geometry": "M0 6l13-6 0 12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#2563EB",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "text",
+          "id": "ZP0AT",
+          "x": 372,
+          "y": 140,
+          "name": "t0",
+          "fill": "#1E3A8A",
+          "content": "0. SUBSCRIBE  (TCP 5000)  →  OK|SUBSCRIBED · fd stored in alert_subscribers",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "path",
+          "id": "ryBfT",
+          "x": 0,
+          "y": 0,
+          "name": "s1",
+          "geometry": "M135 205l234 0",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#D97706",
+          "strokeWidth": 2,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "gCiJe",
+          "x": 362,
+          "y": 199,
+          "name": "a1",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#D97706",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "text",
+          "id": "dHacf",
+          "x": 100,
+          "y": 185,
+          "name": "t1",
+          "fill": "#92400E",
+          "content": "1. TELEMETRY|NODE09|7|TEMP=45.00;HUM=60.7;...  (UDP 5001)",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "C1rJV",
+          "x": 275,
+          "y": 222,
+          "name": "step2",
+          "width": 200,
+          "height": 34,
+          "fill": "#FFFFFF",
+          "cornerRadius": 10,
+          "stroke": "#FCD34D",
+          "strokeWidth": 1,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "c0KX7b",
+              "x": 8,
+              "y": 11,
+              "name": "t2",
+              "fill": "#78350F",
+              "content": "2. parse_message · parse_measurements",
+              "fontFamily": "Inter",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "Jbxjk",
+          "x": 0,
+          "y": 0,
+          "name": "s3",
+          "geometry": "M375 280l234 0",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#475569",
+          "strokeWidth": 2,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "b70DiV",
+          "x": 602,
+          "y": 274,
+          "name": "a3",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#475569",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "text",
+          "id": "dS4Xe",
+          "x": 380,
+          "y": 260,
+          "name": "t3",
+          "fill": "#334155",
+          "content": "3. registry_record_telemetry(id, seq, values)",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "R0Sja4",
+          "x": 530,
+          "y": 296,
+          "name": "step3 box",
+          "width": 170,
+          "height": 62,
+          "fill": "#FFFFFF",
+          "cornerRadius": 10,
+          "stroke": "#CBD5E1",
+          "strokeWidth": 1,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "WFDcj",
+              "x": 54,
+              "y": 8,
+              "name": "lk",
+              "fill": "#0F172A",
+              "content": "lock(mutex)",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "bgqo0",
+              "x": 8,
+              "y": 26,
+              "name": "c1",
+              "fill": "#334155",
+              "content": "45.00 > TEMP_MAX, not before",
+              "fontFamily": "Inter",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "yVsi8",
+              "x": 8,
+              "y": 42,
+              "name": "c2",
+              "fill": "#334155",
+              "content": "→ add_alert(TEMP_HIGH) · unlock",
+              "fontFamily": "Inter",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "ULxyz",
+          "x": 0,
+          "y": 0,
+          "name": "s4",
+          "geometry": "M615 376l-234 0",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#475569",
+          "strokeWidth": 2,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "m0mWXO",
+          "x": 375,
+          "y": 370,
+          "name": "a4",
+          "geometry": "M0 6l13-6 0 12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#475569",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "text",
+          "id": "g8Sv8",
+          "x": 400,
+          "y": 356,
+          "name": "t4",
+          "fill": "#334155",
+          "content": "4. returns 1 new alert (copy)",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "path",
+          "id": "BSgtf",
+          "x": 0,
+          "y": 0,
+          "name": "s5",
+          "geometry": "M375 415l474 0",
+          "viewBox": [
+            0,
+            0,
+            1100,
+            520
+          ],
+          "width": 1100,
+          "height": 520,
+          "stroke": "#2563EB",
+          "strokeWidth": 2.5,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "DwmOz",
+          "x": 842,
+          "y": 409,
+          "name": "a5",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#2563EB",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "text",
+          "id": "Bak9a",
+          "x": 400,
+          "y": 395,
+          "name": "t5",
+          "fill": "#1E3A8A",
+          "content": "5. ALERT|NODE09|TEMP_HIGH|45.00  (TCP push, outside the mutex)",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "frame",
+          "id": "TIyFr",
+          "x": 780,
+          "y": 430,
+          "name": "step6",
+          "width": 150,
+          "height": 34,
+          "fill": "#FFFFFF",
+          "cornerRadius": 10,
+          "stroke": "#93C5FD",
+          "strokeWidth": 1,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "MjgPf",
+              "x": 14,
+              "y": 10,
+              "name": "t6",
+              "fill": "#1E40AF",
+              "content": "6. \"!! ALERT received\"",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "roz7Z",
+          "x": 40,
+          "y": 484,
+          "name": "history",
+          "width": 1020,
+          "height": 26,
+          "fill": "#F1F5F9",
+          "cornerRadius": 6,
+          "padding": [
+            6,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "KKOru",
+              "name": "history text",
+              "fill": "#475569",
+              "content": "History: any operator can request GET_ALERTS (TCP) and the browser GET /alerts (HTTP); both read the same ring buffer. The alert fires once while the value stays anomalous.",
+              "fontFamily": "Inter",
+              "fontSize": 10,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fileToken": "f1d15e18-de90-4bd5-9a83-a20cfcf416ce"
+}

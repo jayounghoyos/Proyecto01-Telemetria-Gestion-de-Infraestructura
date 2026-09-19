@@ -1,0 +1,1295 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "OqASo",
+      "x": 0,
+      "y": 0,
+      "name": "Figure 1 - Architecture",
+      "clip": true,
+      "width": 1200,
+      "height": 640,
+      "fill": "#F8FAFC",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "LTV7c",
+          "x": 40,
+          "y": 26,
+          "name": "Title",
+          "fill": "#0F172A",
+          "content": "Figure 1. Telemetry platform architecture (TELEP/1.0)",
+          "fontFamily": "Inter",
+          "fontSize": 22,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "UcQlx",
+          "x": 40,
+          "y": 56,
+          "name": "Subtitle",
+          "fill": "#64748B",
+          "content": "Simulated IoT nodes and operators on the Internet · central server in C inside Docker on AWS EC2 · located by DNS name",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "WZPLN",
+          "x": 40,
+          "y": 100,
+          "name": "Clients zone",
+          "width": 330,
+          "height": 500,
+          "fill": "#FFFFFF",
+          "cornerRadius": 12,
+          "stroke": "#E2E8F0",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "GOq36",
+              "x": 20,
+              "y": 20,
+              "name": "Clients title",
+              "fill": "#334155",
+              "content": "TEAM MEMBERS' COMPUTERS",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "oJfu1",
+              "x": 20,
+              "y": 40,
+              "name": "Clients sub",
+              "fill": "#94A3B8",
+              "content": "Python 3 · standard library only",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "XGOj8",
+              "x": 20,
+              "y": 70,
+              "name": "Nodes card",
+              "width": 290,
+              "height": 150,
+              "fill": "#FFFBEB",
+              "cornerRadius": 12,
+              "stroke": "#FCD34D",
+              "strokeWidth": 1,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "t9aYK",
+                  "x": 14,
+                  "y": 12,
+                  "name": "Py badge 1",
+                  "fill": "#3776AB",
+                  "cornerRadius": 12,
+                  "padding": [
+                    4,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hUnL6",
+                      "name": "Py badge 1 label",
+                      "fill": "#FFFFFF",
+                      "content": "Py",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "TzvAR",
+                  "x": 56,
+                  "y": 16,
+                  "name": "Nodes title",
+                  "fill": "#92400E",
+                  "content": "Telemetry nodes (≥ 5)",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "FSMa8",
+                  "x": 56,
+                  "y": 34,
+                  "name": "Nodes files",
+                  "fill": "#78350F",
+                  "content": "client/node.py · run_nodes.sh",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "RbC5b",
+                  "x": 16,
+                  "y": 62,
+                  "name": "NODE01",
+                  "width": 78,
+                  "height": 26,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 6,
+                  "stroke": "#FCD34D",
+                  "strokeWidth": 1,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fOL3X",
+                      "name": "NODE01 label",
+                      "fill": "#78350F",
+                      "content": "NODE01",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "a8DSP",
+                  "x": 104,
+                  "y": 62,
+                  "name": "NODE02",
+                  "width": 78,
+                  "height": 26,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 6,
+                  "stroke": "#FCD34D",
+                  "strokeWidth": 1,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZyDQs",
+                      "name": "NODE02 label",
+                      "fill": "#78350F",
+                      "content": "NODE02",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "FnPan",
+                  "x": 192,
+                  "y": 62,
+                  "name": "NODE0n",
+                  "width": 78,
+                  "height": 26,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 6,
+                  "stroke": "#FCD34D",
+                  "strokeWidth": 1,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "b7OTIL",
+                      "name": "NODE0n label",
+                      "fill": "#78350F",
+                      "content": "NODE0n",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "h9wu9",
+                  "x": 16,
+                  "y": 100,
+                  "name": "Nodes vars",
+                  "fill": "#78350F",
+                  "content": "TEMP · HUM · POWER · VIB · STATUS",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "SpGaw",
+                  "x": 16,
+                  "y": 118,
+                  "name": "Nodes proto",
+                  "fill": "#78350F",
+                  "content": "HELLO over TCP, then TELEMETRY|id|seq|… over UDP",
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "YUG7u",
+              "x": 20,
+              "y": 240,
+              "name": "Operators card",
+              "width": 290,
+              "height": 120,
+              "fill": "#EFF6FF",
+              "cornerRadius": 12,
+              "stroke": "#93C5FD",
+              "strokeWidth": 1,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ZdRgR",
+                  "x": 14,
+                  "y": 12,
+                  "name": "Py badge 2",
+                  "fill": "#3776AB",
+                  "cornerRadius": 12,
+                  "padding": [
+                    4,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LDSwv",
+                      "name": "Py badge 2 label",
+                      "fill": "#FFFFFF",
+                      "content": "Py",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "T8Wbc",
+                  "x": 56,
+                  "y": 16,
+                  "name": "Ops title",
+                  "fill": "#1E3A8A",
+                  "content": "Operator clients (≥ 2)",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "cbC4L",
+                  "x": 56,
+                  "y": 34,
+                  "name": "Ops files",
+                  "fill": "#1E40AF",
+                  "content": "operator_cli.py · operator_gui.py (tkinter)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "CaTad",
+                  "x": 16,
+                  "y": 64,
+                  "name": "Ops cmds",
+                  "fill": "#1E40AF",
+                  "content": "GET_NODES · GET_LAST · GET_ALERTS · GET_STATUS",
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "uVpvZ",
+                  "x": 16,
+                  "y": 82,
+                  "name": "Ops sub",
+                  "fill": "#1E40AF",
+                  "content": "SUBSCRIBE → receives ALERT|node|type|value",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "jLw4v",
+              "x": 20,
+              "y": 380,
+              "name": "Browser card",
+              "width": 290,
+              "height": 100,
+              "fill": "#F0FDF4",
+              "cornerRadius": 12,
+              "stroke": "#86EFAC",
+              "strokeWidth": 1,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "ykn0e",
+                  "x": 16,
+                  "y": 14,
+                  "name": "Browser icon",
+                  "width": 22,
+                  "height": 22,
+                  "icon": "globe",
+                  "library": "lucide",
+                  "fill": "#16A34A"
+                },
+                {
+                  "type": "text",
+                  "id": "AmKxv",
+                  "x": 56,
+                  "y": 16,
+                  "name": "Web title",
+                  "fill": "#14532D",
+                  "content": "Web browser",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "s97zZn",
+                  "x": 16,
+                  "y": 48,
+                  "name": "Web paths",
+                  "fill": "#166534",
+                  "content": "GET /  ·  /status  ·  /nodes  ·  /alerts",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "dxGFE",
+                  "x": 16,
+                  "y": 66,
+                  "name": "Web impl",
+                  "fill": "#166534",
+                  "content": "web/index.html (Pico.css + fetch every 3 s)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ellipse",
+          "id": "vmYgz",
+          "x": 425,
+          "y": 290,
+          "name": "Internet cloud",
+          "fill": "#E2E8F0",
+          "width": 190,
+          "height": 120,
+          "stroke": "#CBD5E1",
+          "strokeWidth": 1
+        },
+        {
+          "type": "text",
+          "id": "ebKC4",
+          "x": 485,
+          "y": 336,
+          "name": "Internet",
+          "fill": "#334155",
+          "content": "Internet",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "u53vP",
+          "x": 480,
+          "y": 356,
+          "name": "Internet sub",
+          "fill": "#64748B",
+          "content": "IPv4 · ports",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "PL2eR",
+          "x": 428,
+          "y": 120,
+          "name": "DuckDNS card",
+          "width": 184,
+          "height": 90,
+          "fill": "#FFFFFF",
+          "cornerRadius": 12,
+          "stroke": "#E2E8F0",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "icon",
+              "id": "m5tCSX",
+              "x": 14,
+              "y": 14,
+              "name": "DNS icon",
+              "width": 24,
+              "height": 24,
+              "icon": "map-pin",
+              "library": "lucide",
+              "fill": "#F59E0B"
+            },
+            {
+              "type": "text",
+              "id": "M4NO1x",
+              "x": 50,
+              "y": 16,
+              "name": "DNS title",
+              "fill": "#334155",
+              "content": "DuckDNS",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "x81qH",
+              "x": 50,
+              "y": 34,
+              "name": "DNS name",
+              "fill": "#64748B",
+              "content": "telemetria-eafit.duckdns.org",
+              "fontFamily": "Inter",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "T98WA",
+              "x": 14,
+              "y": 64,
+              "name": "DNS record",
+              "fill": "#64748B",
+              "content": "A record → EC2 public IP",
+              "fontFamily": "Inter",
+              "fontSize": 10,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "v9uAfu",
+          "x": 0,
+          "y": 0,
+          "name": "DNS lookup",
+          "geometry": "M225 165c75-105 195-65 227-37",
+          "viewBox": [
+            0,
+            0,
+            1200,
+            640
+          ],
+          "width": 1200,
+          "height": 640,
+          "stroke": "#94A3B8",
+          "strokeWidth": 1.5,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "w2LWf",
+          "x": 442.1846965813341,
+          "y": 118.04749441536111,
+          "name": "DNS arrowhead",
+          "geometry": "M13.8153 12.95251l-13.8153-3.75998 7.71345-9.19253z",
+          "viewBox": [
+            0,
+            0,
+            13.815303418665906,
+            12.952505584638885
+          ],
+          "fill": "#94A3B8",
+          "width": 13.815303418665906,
+          "height": 12.952505584638885
+        },
+        {
+          "type": "text",
+          "id": "zGPBD",
+          "x": 300,
+          "y": 80,
+          "name": "DNS step",
+          "fill": "#64748B",
+          "content": "1. getaddrinfo(name) → IP",
+          "fontFamily": "Inter",
+          "fontSize": 10,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "YuWmb",
+          "x": 660,
+          "y": 100,
+          "name": "AWS zone",
+          "width": 500,
+          "height": 500,
+          "fill": "#FFF7ED",
+          "cornerRadius": 12,
+          "stroke": "#FDBA74",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "X44KmZ",
+              "x": 20,
+              "y": 12,
+              "name": "aws badge",
+              "fill": "#F97316",
+              "cornerRadius": 12,
+              "padding": [
+                4,
+                10
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "LxmnP",
+                  "name": "aws badge label",
+                  "fill": "#FFFFFF",
+                  "content": "aws",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "Z7unvH",
+              "x": 100,
+              "y": 16,
+              "name": "EC2 title",
+              "fill": "#7C2D12",
+              "content": "EC2 · us-east-1 · Ubuntu · t2.micro",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "w6sOFc",
+              "x": 20,
+              "y": 44,
+              "name": "SG",
+              "fill": "#9A3412",
+              "content": "Security group: 22/tcp · 5000/tcp · 5001/udp · 8080/tcp",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "KKfwI",
+              "x": 30,
+              "y": 75,
+              "name": "Docker card",
+              "width": 440,
+              "height": 400,
+              "fill": "#EFF6FF",
+              "cornerRadius": 12,
+              "stroke": "#60A5FA",
+              "strokeWidth": 1,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "VR9fW",
+                  "x": 16,
+                  "y": 12,
+                  "name": "Docker icon",
+                  "width": 24,
+                  "height": 24,
+                  "icon": "container",
+                  "library": "lucide",
+                  "fill": "#2496ED"
+                },
+                {
+                  "type": "text",
+                  "id": "O1HIT",
+                  "x": 52,
+                  "y": 16,
+                  "name": "Docker title",
+                  "fill": "#1E3A8A",
+                  "content": "Docker container · telemetry-server",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "Rt2Km",
+                  "x": 16,
+                  "y": 40,
+                  "name": "Docker sub",
+                  "fill": "#1E40AF",
+                  "content": "Dockerfile multi-stage (gcc → debian-slim) · compose · restart: unless-stopped",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "ZfYHv",
+                  "x": 20,
+                  "y": 65,
+                  "name": "Server card",
+                  "width": 400,
+                  "height": 315,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": "#CBD5E1",
+                  "strokeWidth": 1,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "aLjqu",
+                      "x": 16,
+                      "y": 12,
+                      "name": "C badge",
+                      "fill": "#004482",
+                      "cornerRadius": 12,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "O2JgI4",
+                          "name": "C badge label",
+                          "fill": "#FFFFFF",
+                          "content": "C",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Wm2sY",
+                      "x": 56,
+                      "y": 16,
+                      "name": "Server title",
+                      "fill": "#0F172A",
+                      "content": "Central server (pthreads)",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qcgDf",
+                      "x": 16,
+                      "y": 52,
+                      "name": "UDP thread",
+                      "width": 176,
+                      "height": 52,
+                      "fill": "#FFFBEB",
+                      "cornerRadius": 12,
+                      "stroke": "#FCD34D",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "pUzFN",
+                          "x": 10,
+                          "y": 10,
+                          "name": "UDP thread t1",
+                          "fill": "#92400E",
+                          "content": "UDP thread :5001",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "UIBN8",
+                          "x": 10,
+                          "y": 28,
+                          "name": "UDP thread t2",
+                          "fill": "#78350F",
+                          "content": "recvfrom → parse → registry",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "T9zBbP",
+                      "x": 208,
+                      "y": 52,
+                      "name": "TCP thread",
+                      "width": 176,
+                      "height": 52,
+                      "fill": "#EFF6FF",
+                      "cornerRadius": 12,
+                      "stroke": "#93C5FD",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Q7HVIG",
+                          "x": 10,
+                          "y": 10,
+                          "name": "TCP thread t1",
+                          "fill": "#1E3A8A",
+                          "content": "TCP accept thread :5000",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "LCean",
+                          "x": 10,
+                          "y": 28,
+                          "name": "TCP thread t2",
+                          "fill": "#1E40AF",
+                          "content": "1 thread per operator/node",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "H8aWWw",
+                      "x": 16,
+                      "y": 120,
+                      "name": "HTTP thread",
+                      "width": 176,
+                      "height": 52,
+                      "fill": "#F0FDF4",
+                      "cornerRadius": 12,
+                      "stroke": "#86EFAC",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "W5wlDZ",
+                          "x": 10,
+                          "y": 10,
+                          "name": "HTTP thread t1",
+                          "fill": "#14532D",
+                          "content": "HTTP thread :8080",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "TNjJo",
+                          "x": 10,
+                          "y": 28,
+                          "name": "HTTP thread t2",
+                          "fill": "#166534",
+                          "content": "index.html + JSON",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qIBkG",
+                      "x": 208,
+                      "y": 120,
+                      "name": "Subscribers",
+                      "width": 176,
+                      "height": 52,
+                      "fill": "#FDF2F8",
+                      "cornerRadius": 12,
+                      "stroke": "#F9A8D4",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cZWTe",
+                          "x": 10,
+                          "y": 10,
+                          "name": "Subscribers t1",
+                          "fill": "#831843",
+                          "content": "alert_subscribers",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "P0O87O",
+                          "x": 10,
+                          "y": 28,
+                          "name": "Subscribers t2",
+                          "fill": "#9D174D",
+                          "content": "pushes ALERT|... over TCP",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Wg6lm",
+                      "x": 16,
+                      "y": 192,
+                      "name": "Registry card",
+                      "width": 368,
+                      "height": 100,
+                      "fill": "#F1F5F9",
+                      "cornerRadius": 12,
+                      "stroke": "#CBD5E1",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g6gkLZ",
+                          "x": 10,
+                          "y": 10,
+                          "name": "Reg title",
+                          "fill": "#0F172A",
+                          "content": "node_registry (in-memory state, 1 mutex)",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "zxDyq",
+                          "x": 10,
+                          "y": 30,
+                          "name": "Reg l1",
+                          "fill": "#334155",
+                          "content": "TelemetryNode[64]: id · last measurement · seq · received · lost",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "pCMgd",
+                          "x": 10,
+                          "y": 48,
+                          "name": "Reg l2",
+                          "fill": "#334155",
+                          "content": "Alert[128] ring buffer · thresholds in config.h (TEMP > 40, VIB > 7, …)",
+                          "fontFamily": "Inter",
+                          "fontSize": 10,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "r78nln",
+                          "x": 10,
+                          "y": 66,
+                          "name": "Reg l3",
+                          "fill": "#334155",
+                          "content": "active = last data < 15 s ago",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "VYobY",
+          "x": 0,
+          "y": 0,
+          "name": "UDP flow",
+          "geometry": "M350 245c80 0 120 55 170 55 80 0 120 18 202 18",
+          "viewBox": [
+            0,
+            0,
+            1200,
+            640
+          ],
+          "width": 1200,
+          "height": 640,
+          "stroke": "#D97706",
+          "strokeWidth": 2.5,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "v6fDl",
+          "x": 713,
+          "y": 312,
+          "name": "UDP head",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#D97706",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "frame",
+          "id": "hRNg0",
+          "x": 392,
+          "y": 228,
+          "name": "UDP label",
+          "fill": "#D97706",
+          "cornerRadius": 12,
+          "padding": [
+            4,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "MyA3j",
+              "name": "UDP label label",
+              "fill": "#FFFFFF",
+              "content": "UDP 5001 · TELEMETRY",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "r52pF",
+          "x": 0,
+          "y": 0,
+          "name": "TCP flow",
+          "geometry": "M354 400c76 0 116-20 166-20 80 0 120-62 394-62",
+          "viewBox": [
+            0,
+            0,
+            1200,
+            640
+          ],
+          "width": 1200,
+          "height": 640,
+          "stroke": "#2563EB",
+          "strokeWidth": 2.5,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "PNrBb",
+          "x": 905,
+          "y": 312,
+          "name": "TCP head",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#2563EB",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "path",
+          "id": "ecUhL",
+          "x": 350,
+          "y": 394,
+          "name": "TCP tail",
+          "geometry": "M0 6l13-6 0 12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#2563EB",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "frame",
+          "id": "DEPhS",
+          "x": 384,
+          "y": 408,
+          "name": "TCP label",
+          "fill": "#2563EB",
+          "cornerRadius": 12,
+          "padding": [
+            4,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "vMlXi",
+              "name": "TCP label label",
+              "fill": "#FFFFFF",
+              "content": "TCP 5000 · queries / ALERT",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "path",
+          "id": "rOS2r",
+          "x": 0,
+          "y": 0,
+          "name": "HTTP flow",
+          "geometry": "M354 530c96 0 146-70 206-90 80-30 100-54 162-54",
+          "viewBox": [
+            0,
+            0,
+            1200,
+            640
+          ],
+          "width": 1200,
+          "height": 640,
+          "stroke": "#16A34A",
+          "strokeWidth": 2.5,
+          "strokeLinecap": "round"
+        },
+        {
+          "type": "path",
+          "id": "LZ4Le",
+          "x": 713,
+          "y": 380,
+          "name": "HTTP head",
+          "geometry": "M13 6l-13 6 0-12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#16A34A",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "path",
+          "id": "YHChW",
+          "x": 350,
+          "y": 524,
+          "name": "HTTP tail",
+          "geometry": "M0 6l13-6 0 12z",
+          "viewBox": [
+            0,
+            0,
+            13,
+            12
+          ],
+          "fill": "#16A34A",
+          "width": 13,
+          "height": 12
+        },
+        {
+          "type": "frame",
+          "id": "aU3o5",
+          "x": 400,
+          "y": 500,
+          "name": "HTTP label",
+          "fill": "#16A34A",
+          "cornerRadius": 12,
+          "padding": [
+            4,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "ZiGLy",
+              "name": "HTTP label label",
+              "fill": "#FFFFFF",
+              "content": "HTTP 8080 · GET",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "rpdWn",
+          "x": 40,
+          "y": 612,
+          "name": "Legend",
+          "gap": 40,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "p7rhnb",
+              "name": "Legend UDP:",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "QAN0c",
+                  "name": "swatch",
+                  "fill": "#D97706",
+                  "width": 30,
+                  "height": 3
+                },
+                {
+                  "type": "text",
+                  "id": "Z6nHH",
+                  "name": "legend text",
+                  "fill": "#475569",
+                  "content": "UDP: periodic telemetry, loss tolerable (seq detects gaps)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Q8eKBv",
+              "name": "Legend TCP:",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "XMXc5",
+                  "name": "swatch",
+                  "fill": "#2563EB",
+                  "width": 30,
+                  "height": 3
+                },
+                {
+                  "type": "text",
+                  "id": "SGI7Y",
+                  "name": "legend text",
+                  "fill": "#475569",
+                  "content": "TCP: registration, queries and alerts (critical information)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "OtNv2",
+              "name": "Legend HTTP",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "NlN7r",
+                  "name": "swatch",
+                  "fill": "#16A34A",
+                  "width": 30,
+                  "height": 3
+                },
+                {
+                  "type": "text",
+                  "id": "p4zmc",
+                  "name": "legend text",
+                  "fill": "#475569",
+                  "content": "HTTP: web status interface",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fileToken": "f1d15e18-de90-4bd5-9a83-a20cfcf416ce"
+}
