@@ -1,0 +1,13 @@
+# C build output
+server/*.o
+server/telemetry_server
+
+# Python
+__pycache__/
+*.pyc
+
+# Node logs written by client/run_nodes.sh
+client/logs/
+
+# SSH keys (AWS Academy labsuser.pem)
+*.pem
