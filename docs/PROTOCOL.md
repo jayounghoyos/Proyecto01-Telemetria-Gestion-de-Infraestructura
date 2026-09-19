@@ -47,8 +47,25 @@ GET_ALERTS
 per alert, then END. Alert types are TEMP_HIGH, HUM_HIGH, POWER_HIGH, VIB_HIGH (value above
 the threshold configured in the server) and STATUS_FAIL.
 
+SUBSCRIBE
+: from now on the server pushes every new alert on this connection. Reply:
+OK|SUBSCRIBED
+
 BYE
 : orderly close. Reply: OK|BYE, then the server closes the socket.
+
+## Alerts pushed by the server
+
+After SUBSCRIBE, the moment a measurement crosses a threshold the server sends, without being
+asked:
+
+    ALERT|NODE03|TEMP_HIGH|42.10
+
+This line can arrive at any time, even between a request and its reply, so the client has to
+recognise it by the ALERT prefix and keep it apart (client/telep.py does this). An alert is
+generated once when the value crosses the threshold, not on every datagram while it stays
+high. Alerts go over TCP because they are the critical information of the system: they must
+not be lost or arrive out of order.
 
 ## Error codes
 
@@ -56,6 +73,7 @@ BYE
     ERR|101|UNKNOWN_CMD    command not recognised
     ERR|102|UNKNOWN_NODE   GET_LAST for a node that is not registered
     ERR|103|TOO_LONG       line longer than 256 bytes (the whole line is discarded)
+    ERR|104|SERVER_FULL    no room for more nodes (64) or subscribers (32)
 
 An error never closes the connection; the client can keep sending commands.
 
@@ -73,6 +91,9 @@ An error never closes the connection; the client can keep sending commands.
     < OK|1
     < 1789690366|NODE01|TEMP_HIGH|45.10
     < END
+    > SUBSCRIBE
+    < OK|SUBSCRIBED
+    < ALERT|NODE02|VIB_HIGH|9.00          (pushed by the server a moment later)
     > GET_LAST|NODE99
     < ERR|102|UNKNOWN_NODE
     > BYE

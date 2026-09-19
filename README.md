@@ -29,7 +29,7 @@ Python 3.8 or newer. The server name comes from --host or the TELEP_SERVER_HOST 
 
     ./client/run_nodes.sh 5                          # five simulated nodes in the background
     python3 client/node.py --id NODE09 --spike TEMP=45   # a node that raises an alert
-    python3 client/operator_cli.py                   # operator, console menu
+    python3 client/operator_cli.py                   # operator, console menu; receives alerts as they happen
     python3 client/operator_gui.py                   # operator, tkinter window
     ./client/stop_nodes.sh
 
