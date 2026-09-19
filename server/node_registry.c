@@ -90,9 +90,12 @@ int registry_record_telemetry(const char *node_id, long sequence, const Measurem
     registry.datagrams_total++;
     TelemetryNode *node = find_node(node_id);
     if (!node) {
+        /* Telemetry from a node that never sent HELLO: usually the server was
+         * restarted (e.g. docker restart). Register it so its data is not lost. */
         registry.datagrams_unknown_node++;
-        pthread_mutex_unlock(&registry_mutex);
-        return -1;
+        node = create_node(node_id);
+        if (!node) { pthread_mutex_unlock(&registry_mutex); return -1; }
+        printf("[registry] node auto-registered from telemetry: %s\n", node_id);
     }
 
     /* UDP loss = a small gap in seq. A huge jump or a step back is not a loss:
