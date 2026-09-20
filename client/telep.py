@@ -1,4 +1,4 @@
-"""Shared TELEP/1.0 protocol module for nodes and operators.
+"""Shared TELEP/2.0 protocol module for nodes and operators.
 
 ASCII text messages: fields separated by '|' and terminated by '\\n'.
 Measurements travel as NAME=value pairs separated by ';'.
@@ -6,12 +6,13 @@ Measurements travel as NAME=value pairs separated by ';'.
 import os
 import select
 import socket
+import time
 
 DEFAULT_HOST = os.environ.get("TELEP_SERVER_HOST", "localhost")
 TCP_PORT = 5000
 UDP_PORT = 5001
 SEPARATOR = "|"
-MAX_LINE = 256
+MAX_LINE = 1024
 END_OF_LIST = "END"
 ALERT_PREFIX = "ALERT" + SEPARATOR
 DEFAULT_TIMEOUT_SECONDS = 5.0
@@ -25,7 +26,10 @@ def resolve_server_address(hostname):
 
 def encode_message(command, *fields):
     """Builds 'CMD|field1|field2\\n' ready to send."""
-    line = SEPARATOR.join([command, *map(str, fields)])
+    parts = [command, *map(str, fields)]
+    if any(not part or any(c in part for c in "|\r\n\x00") for part in parts):
+        raise ValueError("empty field or protocol delimiter")
+    line = SEPARATOR.join(parts)
     if len(line) + 1 > MAX_LINE:
         raise ValueError(f"message exceeds {MAX_LINE} bytes")
     return (line + "\n").encode("ascii")
@@ -65,7 +69,7 @@ class TelepConnection:
         self.port = port
         self.timeout = timeout
         self.socket = None
-        self.reader = None
+        self.buffer = bytearray()
         self.pending_alerts = []
 
     def connect(self):
@@ -73,34 +77,55 @@ class TelepConnection:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   # socket creation
         self.socket.settimeout(self.timeout)
         self.socket.connect((server_ip, self.port))                        # connection
-        self.reader = self.socket.makefile("r", encoding="ascii", newline="\n")
+        self.buffer.clear()
         return server_ip
 
     def close(self):
         if self.socket:
-            try:
-                self.socket.sendall(encode_message("BYE"))
-                self.reader.readline()
-            except OSError:
-                pass
-            self.socket.close()                                            # close
+            self.socket.close()
             self.socket = None
+        self.buffer.clear()
+
+    def _extract(self):
+        index = self.buffer.find(b"\n")
+        if index < 0:
+            if len(self.buffer) >= MAX_LINE:
+                raise ConnectionError("oversized server frame")
+            return None
+        if index >= MAX_LINE:
+            raise ConnectionError("oversized server frame")
+        raw = bytes(self.buffer[:index])
+        del self.buffer[:index + 1]
+        try:
+            return raw.decode("ascii").rstrip("\r")
+        except UnicodeDecodeError as error:
+            raise ConnectionError("invalid server encoding") from error
+
+    def _receive(self):
+        data = self.socket.recv(4096)
+        if not data:
+            raise ConnectionError("the server closed the connection")
+        self.buffer.extend(data)
 
     def read_line(self):
-        """Reads one line from the server; pushed alerts are stored apart and skipped."""
+        deadline = time.monotonic() + self.timeout
         while True:
-            line = self.reader.readline()                                  # receive
-            if not line:
-                raise ConnectionError("the server closed the connection")
-            if not line.startswith(ALERT_PREFIX):
-                return line.rstrip("\r\n")
-            self.pending_alerts.append(decode_message(line))
+            line = self._extract()
+            if line is not None:
+                if not line.startswith(ALERT_PREFIX):
+                    return line
+                self.pending_alerts.append(decode_message(line))
+                continue
+            remaining = deadline - time.monotonic()
+            if remaining <= 0 or not select.select([self.socket], [], [], remaining)[0]:
+                raise TimeoutError("reply deadline exceeded")
+            self._receive()
 
     def request(self, command, *fields):
         """Sends a command and returns the list of decoded reply lines."""
         self.socket.sendall(encode_message(command, *fields))              # send
         response = [decode_message(self.read_line())]
-        if command in ("GET_NODES", "GET_ALERTS") and response[0][0] == "OK":
+        if command in ("GET_NODES", "GET_ALERTS", "STATS") and response[0][0] == "OK":
             while True:
                 line = self.read_line()
                 if line == END_OF_LIST:
@@ -113,13 +138,17 @@ class TelepConnection:
         return self.request("SUBSCRIBE")[0][0] == "OK"
 
     def take_alerts(self):
-        """Returns and clears the pushed alerts, reading first whatever is waiting on the socket."""
-        while select.select([self.socket], [], [], 0)[0]:
-            line = self.reader.readline()
-            if not line:
-                break
-            if line.startswith(ALERT_PREFIX):
+        # Drain complete buffered frames as well as kernel-ready bytes; never wait for a partial line.
+        for _ in range(256):
+            line = self._extract()
+            if line is not None:
+                if not line.startswith(ALERT_PREFIX):
+                    raise ConnectionError("unexpected unsolicited response")
                 self.pending_alerts.append(decode_message(line))
+            elif select.select([self.socket], [], [], 0)[0]:
+                self._receive()
+            else:
+                break
         alerts, self.pending_alerts = self.pending_alerts, []
         return alerts
 

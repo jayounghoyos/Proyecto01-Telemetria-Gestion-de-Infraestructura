@@ -9,6 +9,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "service_health.h"
+static pthread_mutex_t clients_lock = PTHREAD_MUTEX_INITIALIZER;
+static int clients;
 
 typedef struct {
     int  socket_fd;
@@ -83,6 +86,22 @@ static void reply_alert_list(ClientConnection *client) {
     send_text_line(client->socket_fd, "END");
 }
 
+static void reply_stats(ClientConnection *client, const char *id) {
+    RegistrySnapshot snapshot; registry_copy_snapshot(&snapshot);
+    if (id && !snapshot_find_node(&snapshot, id)) { reply_error(client->socket_fd, ERR_UNKNOWN_NODE); return; }
+    char text[MAX_LINE], response[MAX_LINE];
+    snprintf(response, sizeof response, "OK|%d", id ? 1 : count_registered_nodes(&snapshot));
+    send_text_line(client->socket_fd, response);
+    for (int i=0; i<MAX_NODES; i++) {
+        const TelemetryNode *n=&snapshot.nodes[i];
+        if (!n->in_use || (id && strcmp(id,n->node_id))) continue;
+        format_node_stats(n,text,sizeof text);
+        snprintf(response,sizeof response,"%s|%s|%.800s",n->node_id,n->session,text);
+        send_text_line(client->socket_fd,response);
+    }
+    send_text_line(client->socket_fd,"END");
+}
+
 /* Dispatches one command. Returns 1 if the connection must close (BYE), 0 otherwise. */
 static int handle_command(ClientConnection *client, const char *line) {
     ParsedMessage message;
@@ -90,6 +109,32 @@ static int handle_command(ClientConnection *client, const char *line) {
     const char *command = message.command;
     const char *first_arg = message.arg_count >= 1 ? message.args[0] : NULL;
 
+    int expected = -1;
+    if (!strcmp(command,"HELLO")) expected=2;
+    else if (!strcmp(command,"REPORT")) expected=7;
+    else if (!strcmp(command,"GET_LAST")) expected=1;
+    else if (!strcmp(command,"STATS")) expected=message.arg_count <= 1 ? message.arg_count : 0;
+    else if (!strcmp(command,"BYE") || !strcmp(command,"GET_STATUS") || !strcmp(command,"GET_NODES") ||
+             !strcmp(command,"GET_ALERTS") || !strcmp(command,"SUBSCRIBE")) expected=0;
+    if (expected < 0) { reply_error(client->socket_fd,ERR_UNKNOWN_CMD); return 0; }
+    if (message.arg_count != expected) { reply_error(client->socket_fd,ERR_BAD_FORMAT); return 0; }
+    if (!strcmp(command,"STATS")) {
+        if (first_arg && !is_valid_node_id(first_arg)) reply_error(client->socket_fd,ERR_BAD_FORMAT);
+        else reply_stats(client,first_arg);
+        return 0;
+    }
+    if (!strcmp(command,"REPORT")) {
+        long values[5];
+        int valid = is_valid_node_id(first_arg) && is_valid_session(message.args[1]);
+        for (int i=0; i<5; i++) if (parse_uint(message.args[i+2], i==4 ? 1 : SESSION_LIMIT, &values[i])) valid=0;
+        if (!valid) reply_error(client->socket_fd,ERR_BAD_FORMAT);
+        else {
+            int result=registry_report(first_arg,message.args[1],values[0],values[1],values[2],values[3],(int)values[4]);
+            if (result) reply_error(client->socket_fd,result);
+            else send_text_line(client->socket_fd,"OK|REPORTED");
+        }
+        return 0;
+    }
     if (strcmp(command, "BYE") == 0) { send_text_line(client->socket_fd, "OK|BYE"); return 1; }
     if (strcmp(command, "GET_STATUS") == 0) { reply_status(client); return 0; }
     if (strcmp(command, "GET_NODES") == 0)  { reply_node_list(client); return 0; }
@@ -107,7 +152,9 @@ static int handle_command(ClientConnection *client, const char *line) {
         return 0;
     }
     if (strcmp(command, "HELLO") == 0) {
-        if (registry_register_node(first_arg) < 0) reply_error(client->socket_fd, ERR_SERVER_FULL);
+        if (!is_valid_session(message.args[1])) { reply_error(client->socket_fd, ERR_BAD_FORMAT); return 0; }
+        int result = registry_register_node(first_arg, message.args[1]);
+        if (result) reply_error(client->socket_fd, result);
         else { printf("[tcp] %s registers node %s\n", client->peer_text, first_arg); send_text_line(client->socket_fd, "OK|REGISTERED"); }
         return 0;
     }
@@ -124,8 +171,13 @@ static void *serve_client(void *connection) {
     char line[MAX_LINE];
     printf("[tcp] connected %s\n", client->peer_text);
     for (;;) {
+        if (subscribers_drain(client->socket_fd) < 0) break;
+        int ready = wait_readable(client->socket_fd, 100);
+        if (ready < 0) break;
+        if (!ready) continue;
         int result = receive_text_line(client->socket_fd, line, sizeof line);
         if (result == 0 || result == -1) break;
+        if (result == -3) { reply_error(client->socket_fd, ERR_BAD_FORMAT); continue; }
         if (result == -2) { reply_error(client->socket_fd, ERR_TOO_LONG); continue; }
         if (handle_command(client, line)) break;
     }
@@ -133,6 +185,7 @@ static void *serve_client(void *connection) {
     subscribers_remove(client->socket_fd);
     close(client->socket_fd);
     free(client);
+    pthread_mutex_lock(&clients_lock); clients--; pthread_mutex_unlock(&clients_lock);
     return NULL;
 }
 
@@ -140,12 +193,24 @@ void *tcp_command_server(void *listening_fd) {
     int listener_fd = *(int *)listening_fd;
     printf("[tcp] listening for commands on port %d\n", TCP_PORT);
     for (;;) {
+        service_heartbeat(0);
+        if (wait_readable(listener_fd, 250) <= 0) continue;
         struct sockaddr_in peer_address;
         socklen_t peer_length = sizeof peer_address;
         int client_fd = accept(listener_fd, (struct sockaddr *)&peer_address, &peer_length);
         if (client_fd < 0) { perror("accept"); continue; }
 
+        pthread_mutex_lock(&clients_lock);
+        if (clients >= 64) { pthread_mutex_unlock(&clients_lock); close(client_fd); continue; }
+        clients++; pthread_mutex_unlock(&clients_lock);
         ClientConnection *client = malloc(sizeof *client);
+        if (!client) {
+            close(client_fd);
+            pthread_mutex_lock(&clients_lock); clients--; pthread_mutex_unlock(&clients_lock);
+            continue;
+        }
+        int send_buffer = 8192;
+        setsockopt(client_fd, SOL_SOCKET, SO_SNDBUF, &send_buffer, sizeof send_buffer);
         client->socket_fd = client_fd;
         describe_peer(&peer_address, client->peer_text, sizeof client->peer_text);
 
@@ -154,6 +219,7 @@ void *tcp_command_server(void *listening_fd) {
             perror("pthread_create");
             close(client_fd);
             free(client);
+            pthread_mutex_lock(&clients_lock); clients--; pthread_mutex_unlock(&clients_lock);
             continue;
         }
         pthread_detach(client_thread);

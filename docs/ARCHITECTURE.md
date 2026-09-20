@@ -1,45 +1,52 @@
-# Architecture
+# Arquitectura implementada — TELEP/2.0
 
-The platform has three parts: telemetry nodes and operator clients written in Python, and a
-central server written in C that runs inside Docker on an AWS EC2 instance. Clients find the
-server through a DNS name, never through a fixed IP.
+Python node.py → UDP 5001 → receptor C → registro protegido por mutex.
+Python CLI/GUI → TCP 5000 → un hilo por cliente → snapshots del registro.
+Navegador → HTTP 8080 → hasta 16 trabajadores → snapshot/JSON/HTML.
+Los diagramas en diagrams/ son históricos de TELEP/1; deben actualizarse antes
+del informe final para incluir colas, sesiones y REPORT. No acreditan ejecución.
 
-![Figure 1. Platform architecture](diagrams/01-architecture.png)
+## Hilos y propiedad
 
-Figure 1. Nodes send telemetry over UDP (port 5001); operators send queries and receive alerts
-over TCP (port 5000); a browser reads the status page over HTTP (port 8080).
+- El hilo UDP valida, registra y encola alertas. Nunca envía por TCP.
+- El aceptador TCP mantiene su latido y limita a 64 conexiones.
+- Cada conexión tiene un único hilo lector/escritor. Termina toda la respuesta
+  antes de vaciar alertas. Cada mensaje incluye LF antes de entrar al envío.
+- Las colas tienen 32 mensajes y hasta 32 suscriptores. Desbordamiento implica
+  shutdown, no close desde el productor; el propietario retira la suscripción y
+  cierra, evitando reutilización insegura del descriptor.
+- Envíos tienen plazo absoluto de un segundo. Una entrada TCP parcial tiene
+  tres segundos; una conexión ociosa puede seguir suscrita.
+- HTTP tiene trabajadores separados, límites de cabeceras y plazo absoluto.
+  Un cliente lento no monopoliza el aceptador. Respuestas se generan fuera del mutex.
 
-## Why UDP for telemetry and TCP for everything else
+## Estado y medición
 
-Telemetry is sent every couple of seconds. If one datagram is lost the next one replaces it, so
-reliability is not worth the cost of a connection per node. Each datagram carries a sequence
-number, which lets the server count how many were lost.
+64 nodos, 128 alertas en anillo, bitmap de 65536 bits por nodo (512 KiB total)
+fuera de los snapshots. Memoria acotada; no hay almacenamiento persistente.
+Un ID está ligado a su sesión hasta terminar el proceso. Duplicados no actualizan
+mediciones; reordenamientos corrigen recepción/pérdida sin retroceder datos.
+REPORT lleva contadores del emisor. STATS y HTTP muestran exactamente su alcance.
+Los latidos de los bucles TCP/UDP sustituyen el rótulo fijo ONLINE. No garantizan
+conectividad pública, salud del DNS ni persistencia.
 
-Registration, operator queries and alerts are different: they must arrive complete, in order
-and be acknowledged, so they go over TCP. Alerts are pushed by the server on the operator's
-open TCP connection, which is what the assignment calls critical information.
+## Recuperación
 
-## Concurrency
+Nodo: re-resuelve DNS y renueva el plano de control periódicamente, pausa al fallar,
+y abre otra sesión si cambia boot_id. CLI sale de forma controlada ante desconexión;
+GUI conserva ventana y reintenta cada tres segundos. La GUI todavía usa llamadas
+síncronas con timeout: el renderizado visual/latencia se valida manualmente.
 
-![Figure 2. Server threads](diagrams/02-server-threads.png)
+## Elección de transportes
 
-Figure 2. The server uses POSIX threads: one for UDP, one that accepts TCP connections and
-starts a thread per client, and one for HTTP. They share the node registry through a single
-mutex. Readers copy a snapshot and build their reply outside the lock, so nodes never wait for
-a slow operator. A client that disconnects or sends garbage only ends its own thread.
+UDP evita una conexión por flujo periódico; una lectura más reciente reemplaza a la
+anterior. TCP proporciona flujo ordenado para comandos y reportes. La aplicación
+sigue necesitando encuadre, límites, sesiones y detección de desconexión. El push
+TCP no reemplaza el historial ni garantiza que un usuario haya visto la alerta.
 
-## Alert flow
+## Límites y seguridad
 
-![Figure 3. Alert flow](diagrams/03-alert-flow.png)
-
-Figure 3. A measurement above a threshold creates an alert once (not on every datagram while
-the value stays high). Subscribed operators receive it immediately; anyone can also ask for the
-history with GET_ALERTS or read /alerts in the browser.
-
-## Deployment
-
-![Figure 4. Network and deployment](diagrams/04-network-deployment.png)
-
-Figure 4. In AWS Academy the public IP changes every time the instance starts. A small systemd
-service updates the DuckDNS record on boot, Docker restarts the container, and the clients keep
-using the same name. Ports 22, 5000/tcp, 5001/udp and 8080 are opened in the security group.
+Sin autenticación/TLS, rate limiting por identidad ni almacenamiento duradero.
+La política de ID evita colisiones accidentales, no atacantes que conozcan la sesión.
+Las reglas de nube y evidencia de acceso externo se verifican por separado;
+los tests locales no las sustituyen.

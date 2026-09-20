@@ -1,0 +1,406 @@
+[udp] listening for telemetry on port 5001
+[tcp] listening for commands on port 5000
+[main] TELEP/1.0 server ready (tcp 5000, udp 5001, http 8080)
+[tcp] connected 127.0.0.1:52322
+[tcp] disconnected 127.0.0.1:52322
+[tcp] connected 127.0.0.1:52324
+[tcp] connected 127.0.0.1:52326
+[tcp] connected 127.0.0.1:52332
+[tcp] connected 127.0.0.1:52344
+[tcp] 127.0.0.1:52332 registers node Ed3d20bf00
+[tcp] connected 127.0.0.1:52348
+[tcp] 127.0.0.1:52344 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:52332
+[tcp] 127.0.0.1:52348 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:52344
+[alert] Ed3d20bf00 TEMP_HIGH 45.00
+[alert] E007c2e9d2 TEMP_HIGH 45.00
+[tcp] disconnected 127.0.0.1:52348
+[alert] Edefcd5b61 TEMP_HIGH 45.00
+[tcp] connected 127.0.0.1:52360
+[tcp] 127.0.0.1:52360 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:52360
+[alert] E6f57a4763 TEMP_HIGH 45.00
+[tcp] connected 127.0.0.1:52374
+[tcp] 127.0.0.1:52374 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:52374
+[alert] Eaaf088c14 TEMP_HIGH 45.00
+[tcp] connected 127.0.0.1:52388
+[tcp] 127.0.0.1:52388 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:52388
+[tcp] connected 127.0.0.1:52392
+[tcp] 127.0.0.1:52392 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:52392
+[tcp] connected 127.0.0.1:52406
+[tcp] 127.0.0.1:52406 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:52406
+[tcp] connected 127.0.0.1:52408
+[tcp] 127.0.0.1:52408 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:52408
+[tcp] connected 127.0.0.1:52422
+[tcp] 127.0.0.1:52422 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:52422
+[tcp] connected 127.0.0.1:51344
+[tcp] 127.0.0.1:51344 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:51344
+[tcp] connected 127.0.0.1:51352
+[tcp] 127.0.0.1:51352 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:51352
+[tcp] connected 127.0.0.1:51358
+[tcp] 127.0.0.1:51358 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:51358
+[tcp] connected 127.0.0.1:51366
+[tcp] 127.0.0.1:51366 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:51366
+[tcp] connected 127.0.0.1:51376
+[tcp] 127.0.0.1:51376 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:51376
+[tcp] connected 127.0.0.1:51388
+[tcp] 127.0.0.1:51388 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:51388
+[tcp] connected 127.0.0.1:51402
+[tcp] 127.0.0.1:51402 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:51402
+[tcp] connected 127.0.0.1:51412
+[tcp] 127.0.0.1:51412 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:51412
+[tcp] connected 127.0.0.1:51414
+[tcp] 127.0.0.1:51414 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:51414
+[tcp] connected 127.0.0.1:51416
+[tcp] 127.0.0.1:51416 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:51416
+[tcp] connected 127.0.0.1:51324
+[tcp] connected 127.0.0.1:51322
+[tcp] 127.0.0.1:51324 registers node E007c2e9d2
+[tcp] 127.0.0.1:51322 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:51324
+[tcp] disconnected 127.0.0.1:51322
+[tcp] connected 127.0.0.1:51336
+[tcp] 127.0.0.1:51336 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:51336
+[tcp] connected 127.0.0.1:51352
+[tcp] connected 127.0.0.1:51356
+[tcp] 127.0.0.1:51352 registers node E6f57a4763
+[tcp] 127.0.0.1:51356 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:51352
+[tcp] disconnected 127.0.0.1:51356
+[tcp] connected 127.0.0.1:51358
+[tcp] connected 127.0.0.1:51360
+[tcp] 127.0.0.1:51358 registers node Ed3d20bf00
+[tcp] 127.0.0.1:51360 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:51358
+[tcp] disconnected 127.0.0.1:51360
+[tcp] connected 127.0.0.1:51366
+[tcp] 127.0.0.1:51366 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:51366
+[tcp] connected 127.0.0.1:51382
+[tcp] connected 127.0.0.1:51392
+[tcp] 127.0.0.1:51382 registers node E6f57a4763
+[tcp] 127.0.0.1:51392 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:51382
+[tcp] disconnected 127.0.0.1:51392
+[tcp] connected 127.0.0.1:58866
+[tcp] connected 127.0.0.1:58868
+[tcp] 127.0.0.1:58866 registers node E007c2e9d2
+[tcp] 127.0.0.1:58868 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:58866
+[tcp] disconnected 127.0.0.1:58868
+[tcp] connected 127.0.0.1:58896
+[tcp] 127.0.0.1:58896 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:58896
+[tcp] connected 127.0.0.1:58902
+[tcp] connected 127.0.0.1:58904
+[tcp] 127.0.0.1:58902 registers node E6f57a4763
+[tcp] 127.0.0.1:58904 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:58902
+[tcp] disconnected 127.0.0.1:58904
+[tcp] connected 127.0.0.1:58916
+[tcp] 127.0.0.1:58916 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:58916
+[tcp] connected 127.0.0.1:58924
+[tcp] 127.0.0.1:58924 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:58924
+[tcp] connected 127.0.0.1:58940
+[tcp] 127.0.0.1:58940 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:58940
+[tcp] connected 127.0.0.1:58944
+[tcp] 127.0.0.1:58944 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:58944
+[tcp] connected 127.0.0.1:58946
+[tcp] 127.0.0.1:58946 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:58946
+[tcp] connected 127.0.0.1:39058
+[tcp] 127.0.0.1:39058 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:39058
+[tcp] connected 127.0.0.1:39064
+[tcp] 127.0.0.1:39064 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:39064
+[tcp] connected 127.0.0.1:39074
+[tcp] 127.0.0.1:39074 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:39074
+[tcp] connected 127.0.0.1:39078
+[tcp] 127.0.0.1:39078 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:39078
+[tcp] connected 127.0.0.1:39086
+[tcp] 127.0.0.1:39086 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:39086
+[tcp] connected 127.0.0.1:39088
+[tcp] 127.0.0.1:39088 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:39088
+[tcp] connected 127.0.0.1:39102
+[tcp] connected 127.0.0.1:39118
+[tcp] 127.0.0.1:39102 registers node Edefcd5b61
+[tcp] 127.0.0.1:39118 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:39102
+[tcp] disconnected 127.0.0.1:39118
+[tcp] connected 127.0.0.1:39128
+[tcp] 127.0.0.1:39128 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:39128
+[tcp] connected 127.0.0.1:39130
+[tcp] 127.0.0.1:39130 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:39130
+[tcp] connected 127.0.0.1:48396
+[tcp] 127.0.0.1:48396 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:48396
+[tcp] connected 127.0.0.1:48404
+[tcp] 127.0.0.1:48404 registers node Ed3d20bf00
+[tcp] connected 127.0.0.1:48412
+[tcp] disconnected 127.0.0.1:48404
+[tcp] 127.0.0.1:48412 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:48412
+[tcp] connected 127.0.0.1:48422
+[tcp] 127.0.0.1:48422 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:48422
+[tcp] connected 127.0.0.1:48432
+[tcp] 127.0.0.1:48432 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:48432
+[tcp] connected 127.0.0.1:48448
+[tcp] 127.0.0.1:48448 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:48448
+[tcp] connected 127.0.0.1:48474
+[tcp] connected 127.0.0.1:48460
+[tcp] 127.0.0.1:48474 registers node Ed3d20bf00
+[tcp] 127.0.0.1:48460 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:48474
+[tcp] disconnected 127.0.0.1:48460
+[tcp] connected 127.0.0.1:48486
+[tcp] 127.0.0.1:48486 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:48486
+[tcp] connected 127.0.0.1:48494
+[tcp] 127.0.0.1:48494 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:48494
+[tcp] connected 127.0.0.1:48212
+[tcp] 127.0.0.1:48212 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:48212
+[tcp] connected 127.0.0.1:48216
+[tcp] connected 127.0.0.1:48218
+[tcp] 127.0.0.1:48216 registers node Edefcd5b61
+[tcp] 127.0.0.1:48218 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:48216
+[tcp] disconnected 127.0.0.1:48218
+[tcp] connected 127.0.0.1:48234
+[tcp] 127.0.0.1:48234 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:48234
+[tcp] connected 127.0.0.1:48236
+[tcp] 127.0.0.1:48236 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:48236
+[tcp] connected 127.0.0.1:48252
+[tcp] 127.0.0.1:48252 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:48252
+[tcp] connected 127.0.0.1:48266
+[tcp] 127.0.0.1:48266 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:48266
+[tcp] connected 127.0.0.1:48274
+[tcp] 127.0.0.1:48274 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:48274
+[tcp] connected 127.0.0.1:48284
+[tcp] 127.0.0.1:48284 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:48284
+[tcp] connected 127.0.0.1:48294
+[tcp] 127.0.0.1:48294 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:48294
+[tcp] connected 127.0.0.1:55308
+[tcp] 127.0.0.1:55308 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:55308
+[tcp] connected 127.0.0.1:55318
+[tcp] 127.0.0.1:55318 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:55318
+[tcp] connected 127.0.0.1:55324
+[tcp] 127.0.0.1:55324 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:55324
+[tcp] connected 127.0.0.1:55334
+[tcp] 127.0.0.1:55334 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:55334
+[tcp] connected 127.0.0.1:55344
+[tcp] 127.0.0.1:55344 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:55344
+[tcp] connected 127.0.0.1:55360
+[tcp] 127.0.0.1:55360 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:55360
+[tcp] connected 127.0.0.1:55362
+[tcp] 127.0.0.1:55362 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:55362
+[tcp] connected 127.0.0.1:55364
+[tcp] 127.0.0.1:55364 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:55364
+[tcp] connected 127.0.0.1:55380
+[tcp] 127.0.0.1:55380 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:55380
+[tcp] connected 127.0.0.1:55392
+[tcp] 127.0.0.1:55392 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:55392
+[tcp] connected 127.0.0.1:45132
+[tcp] 127.0.0.1:45132 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:45132
+[tcp] connected 127.0.0.1:45138
+[tcp] 127.0.0.1:45138 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:45138
+[tcp] connected 127.0.0.1:45152
+[tcp] connected 127.0.0.1:45166
+[tcp] 127.0.0.1:45152 registers node E6f57a4763
+[tcp] 127.0.0.1:45166 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:45152
+[tcp] disconnected 127.0.0.1:45166
+[tcp] connected 127.0.0.1:45174
+[tcp] 127.0.0.1:45174 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:45174
+[tcp] connected 127.0.0.1:45188
+[tcp] 127.0.0.1:45188 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:45188
+[tcp] connected 127.0.0.1:45198
+[tcp] 127.0.0.1:45198 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:45198
+[tcp] connected 127.0.0.1:45208
+[tcp] connected 127.0.0.1:45210
+[tcp] 127.0.0.1:45208 registers node E6f57a4763
+[tcp] 127.0.0.1:45210 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:45208
+[tcp] disconnected 127.0.0.1:45210
+[tcp] connected 127.0.0.1:45218
+[tcp] 127.0.0.1:45218 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:45218
+[tcp] connected 127.0.0.1:58246
+[tcp] 127.0.0.1:58246 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:58246
+[tcp] connected 127.0.0.1:58258
+[tcp] 127.0.0.1:58258 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:58258
+[tcp] connected 127.0.0.1:58260
+[tcp] connected 127.0.0.1:58262
+[tcp] 127.0.0.1:58260 registers node Edefcd5b61
+[tcp] 127.0.0.1:58262 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:58260
+[tcp] disconnected 127.0.0.1:58262
+[tcp] connected 127.0.0.1:58286
+[tcp] 127.0.0.1:58286 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:58286
+[tcp] connected 127.0.0.1:58300
+[tcp] 127.0.0.1:58300 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:58300
+[tcp] connected 127.0.0.1:58312
+[tcp] 127.0.0.1:58312 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:58312
+[tcp] connected 127.0.0.1:58322
+[tcp] connected 127.0.0.1:58324
+[tcp] 127.0.0.1:58322 registers node Edefcd5b61
+[tcp] 127.0.0.1:58324 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:58322
+[tcp] disconnected 127.0.0.1:58324
+[tcp] connected 127.0.0.1:58338
+[tcp] 127.0.0.1:58338 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:58338
+[tcp] connected 127.0.0.1:53702
+[tcp] 127.0.0.1:53702 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:53702
+[tcp] connected 127.0.0.1:53718
+[tcp] 127.0.0.1:53718 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:53718
+[tcp] connected 127.0.0.1:53728
+[tcp] 127.0.0.1:53728 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:53728
+[tcp] connected 127.0.0.1:53730
+[tcp] 127.0.0.1:53730 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:53730
+[tcp] connected 127.0.0.1:53742
+[tcp] 127.0.0.1:53742 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:53742
+[tcp] connected 127.0.0.1:53758
+[tcp] 127.0.0.1:53758 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:53758
+[tcp] connected 127.0.0.1:53766
+[tcp] 127.0.0.1:53766 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:53766
+[tcp] connected 127.0.0.1:53778
+[tcp] 127.0.0.1:53778 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:53778
+[tcp] connected 127.0.0.1:53786
+[tcp] 127.0.0.1:53786 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:53786
+[tcp] connected 127.0.0.1:53790
+[tcp] 127.0.0.1:53790 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:53790
+[tcp] connected 127.0.0.1:36660
+[tcp] 127.0.0.1:36660 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:36660
+[tcp] connected 127.0.0.1:36674
+[tcp] 127.0.0.1:36674 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:36674
+[tcp] connected 127.0.0.1:36680
+[tcp] 127.0.0.1:36680 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:36680
+[tcp] connected 127.0.0.1:36692
+[tcp] 127.0.0.1:36692 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:36692
+[tcp] connected 127.0.0.1:36698
+[tcp] 127.0.0.1:36698 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:36698
+[tcp] connected 127.0.0.1:36714
+[tcp] connected 127.0.0.1:36716
+[tcp] 127.0.0.1:36714 registers node Ed3d20bf00
+[tcp] 127.0.0.1:36716 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:36714
+[tcp] disconnected 127.0.0.1:36716
+[tcp] connected 127.0.0.1:36722
+[tcp] 127.0.0.1:36722 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:36722
+[tcp] connected 127.0.0.1:36724
+[tcp] 127.0.0.1:36724 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:36724
+[tcp] connected 127.0.0.1:36740
+[tcp] 127.0.0.1:36740 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:36740
+[tcp] connected 127.0.0.1:43062
+[tcp] connected 127.0.0.1:43074
+[tcp] 127.0.0.1:43062 registers node Ed3d20bf00
+[tcp] 127.0.0.1:43074 registers node E007c2e9d2
+[tcp] disconnected 127.0.0.1:43062
+[tcp] disconnected 127.0.0.1:43074
+[tcp] connected 127.0.0.1:43088
+[tcp] 127.0.0.1:43088 registers node Edefcd5b61
+[tcp] disconnected 127.0.0.1:43088
+[tcp] connected 127.0.0.1:43094
+[tcp] 127.0.0.1:43094 registers node E6f57a4763
+[tcp] disconnected 127.0.0.1:43094
+[tcp] connected 127.0.0.1:43102
+[tcp] 127.0.0.1:43102 registers node Eaaf088c14
+[tcp] disconnected 127.0.0.1:43102
+[tcp] connected 127.0.0.1:43116
+[tcp] connected 127.0.0.1:43114
+[tcp] connected 127.0.0.1:43118
+[tcp] connected 127.0.0.1:43120
+[tcp] connected 127.0.0.1:43122
+[tcp] 127.0.0.1:43116 registers node E007c2e9d2
+[tcp] 127.0.0.1:43114 registers node E6f57a4763
+[tcp] 127.0.0.1:43118 registers node Eaaf088c14
+[tcp] 127.0.0.1:43120 registers node Edefcd5b61
+[tcp] 127.0.0.1:43122 registers node Ed3d20bf00
+[tcp] disconnected 127.0.0.1:43116
+[tcp] disconnected 127.0.0.1:43114
+[tcp] disconnected 127.0.0.1:43118
+[tcp] disconnected 127.0.0.1:43120
+[tcp] disconnected 127.0.0.1:43122
+[tcp] disconnected 127.0.0.1:52326
+[tcp] disconnected 127.0.0.1:52324
+[tcp] connected 127.0.0.1:43164
+[tcp] disconnected 127.0.0.1:43164

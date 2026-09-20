@@ -1,107 +1,150 @@
-# TELEP/1.0 protocol
+# TELEP/2.0 — especificación implementada
 
-TELEP (Telemetry Exchange Protocol) is the application protocol we designed for this project.
-It is text based: every message is one line of ASCII, fields are separated by a vertical bar
-and the line ends with a newline character. A message never exceeds 256 bytes.
+## Encuadre y transportes
 
-    COMMAND|argument1|argument2|...
+ASCII imprimible sin espacios en mensajes TELEP; campos `|`, mediciones `;`,
+pares `=`. Cada trama acaba en LF. TCP acepta también CRLF. Máximo **1024 bytes
+incluido LF** (CRLF debe caber en el mismo límite). No se permiten campos vacíos,
+NUL, campos extra, nombres desconocidos o mediciones duplicadas. UDP transporta
+exactamente una trama por datagrama; se rechazan truncamiento, LF interno y CR.
 
-Measurements travel in a single field as name=value pairs separated by semicolons, for
-example TEMP=24.80;HUM=60.10;POWER=120.50;VIB=0.30;STATUS=OK. STATUS is OK or FAIL, the rest
-are numbers with a decimal point. A node id is 1 to 15 characters: letters, digits, _ or -.
+TCP 5000 para consultas, registro y reportes del emisor; UDP 5001 para telemetría
+periódica tolerante a pérdida; HTTP 8080 complementa las consultas. TCP entrega
+bytes ordenados mientras existe la conexión: no constituye persistencia ni acuse
+por la interfaz del operador. Las alertas almacenadas se consultan con GET_ALERTS.
 
-## Transport
+## Identidad y límites
 
-Telemetry goes over UDP on port 5001. It is sent every few seconds and losing one datagram is
-acceptable because the next one replaces it. Every other message goes over TCP on port 5000
-because it has to arrive complete, in order and be answered.
+`id`: `[A-Za-z0-9_-]{1,15}`. `session`: 32 caracteres hexadecimales minúsculos.
+Un ID pertenece a una sesión durante toda la vida del proceso servidor. HELLO
+idéntico es idempotente; otra sesión para ese ID recibe 105. No hay autenticación:
+conocer/copiar una sesión permite suplantarla. No usar este diseño como plataforma
+pública de producción. No se autorregistran emisores por UDP.
 
-## Telemetry (UDP, node to server, no reply)
+Sesiones limitadas a 65536 intentos, secuencia 0..65535. Un bitmap acotado conserva
+las recepciones de toda la sesión, sin una heurística de saltos de 100. Al alcanzar
+el límite, el nodo termina y reporta; no rota silenciosamente sus estadísticas.
 
-    TELEMETRY|NODE03|17|TEMP=24.80;HUM=60.10;POWER=118.20;VIB=0.41;STATUS=OK
+## Comandos TCP
 
-The third field is a sequence number that the node increments on every datagram. The server
-uses it to detect gaps and count lost datagrams. A malformed datagram is dropped and logged.
+| Solicitud | Respuesta |
+|---|---|
+| `HELLO|id|session` | `OK|REGISTERED` |
+| `GET_STATUS` | `OK|clave=valor;...` (resumen numérico, ver contadores) |
+| `GET_NODES` | `OK|n`, n líneas `id|ACTIVE/INACTIVE|edad_segundos`, `END` |
+| `GET_LAST|id` | `OK|id|epoch|mediciones`, o `OK|id|0|NO_DATA` |
+| `GET_ALERTS` | `OK|n`, n líneas `epoch|id|tipo|valor`, `END` |
+| `STATS` o `STATS|id` | `OK|n`, n líneas `id|session|clave=valor;...`, `END` |
+| `REPORT|id|session|attempts|sent|omitted|send_errors|final` | `OK|REPORTED` |
+| `SUBSCRIBE` | `OK|SUBSCRIBED`; suscripción idempotente |
+| `BYE` | `OK|BYE`, cierre |
 
-## Commands (TCP, request and reply)
+REPORT tiene 7 argumentos; sus cuatro contadores son enteros 0..65536,
+monótonos y `attempts=sent+omitted+send_errors`. `final` es 0 o 1.
+Un reporte final no puede retroceder ni cambiar; sí admite repetición idéntica.
+Después de final no se aceptan secuencias >= attempts. Los paquetes atrasados
+con secuencia anterior siguen corrigiendo la estimación.
 
-The TCP connection stays open; a client sends several commands and ends with BYE. Every reply
-starts with OK or ERR. Replies that contain a list send OK|n, then n lines, then a line END.
+## Telemetría y validación
 
-HELLO|node_id
-: registers a node. Reply: OK|REGISTERED
+```text
+HELLO|NODE01|0123456789abcdef0123456789abcdef
+TELEMETRY|NODE01|0123456789abcdef0123456789abcdef|0|TEMP=24.8;HUM=60;POWER=120;VIB=0.5;STATUS=OK
+REPORT|NODE01|0123456789abcdef0123456789abcdef|1|1|0|0|1
+```
 
-GET_STATUS
-: general state. Reply: OK|uptime=95;registered=5;active=5;udp_rx=151;udp_lost=2;alerts=2
+TELEMETRY tiene cuatro argumentos y al menos tres variables diferentes:
 
-GET_NODES
-: registered nodes. Reply: OK|n followed by one line per node, node_id|ACTIVE|seconds_since_last_data
-(or INACTIVE; -1 if the node never sent data), then END. A node is active if it sent data in
-the last 15 seconds.
+| Variable | Valores válidos | Alerta |
+|---|---|---|
+| TEMP | decimal finito, -100..200 | >40 |
+| HUM | decimal finito, 0..100 | >85 |
+| POWER | decimal finito, 0..1000000 | >500 |
+| VIB | decimal finito, 0..1000 | >7 |
+| STATUS | exactamente OK o FAIL | FAIL |
 
-GET_LAST|node_id
-: last measurement of a node. Reply: OK|node_id|epoch|measurements, or OK|node_id|0|NO_DATA
+Se admite notación decimal científica finita dentro del rango; no hexadecimal,
+NaN/Inf, desbordamiento o subdesbordamiento. Un datagrama inválido se descarta
+sin respuesta UDP y aumenta `udp_invalid`. Una sesión desconocida aumenta
+`udp_unknown`. Consultar HTTP/GET_STATUS para observar esos descartes.
 
-GET_ALERTS
-: alert history (up to the last 128, oldest first). Reply: OK|n, then epoch|node_id|type|value
-per alert, then END. Alert types are TEMP_HIGH, HUM_HIGH, POWER_HIGH, VIB_HIGH (value above
-the threshold configured in the server) and STATUS_FAIL.
+## Alertas, actividad y concurrencia
 
-SUBSCRIBE
-: from now on the server pushes every new alert on this connection. Reply:
-OK|SUBSCRIBED
+`ALERT|NODE01|TEMP_HIGH|45.00`. Otros tipos: HUM_HIGH, POWER_HIGH, VIB_HIGH,
+STATUS_FAIL. Se genera una alerta al entrar en anomalía, no por cada repetición.
+El historial retiene 128; la web muestra las últimas 20. No hay persistencia.
+La última medición solo se actualiza por una secuencia nueva mayor que la anterior.
+Un duplicado o un paquete reordenado no reemplaza la última medición ni genera alerta.
+ACTIVE significa telemetría única aceptada en los últimos 15 segundos.
 
-BYE
-: orderly close. Reply: OK|BYE, then the server closes the socket.
+Un único hilo escribe cada conexión; las alertas encoladas se envían entre respuestas
+completas, sin intercalar bytes ni líneas dentro de una lista. Cola de 32 alertas por
+suscriptor; si se llena, se desconecta. Plazo de envío de un mensaje: un segundo.
+Recuperar historial con GET_ALERTS al reconectar. No hay garantía de entrega de push
+si se desconecta el consumidor. `slow_disconnected` cuenta desbordamientos de cola.
 
-## Alerts pushed by the server
+## Contadores: significado exacto
 
-After SUBSCRIBE, the moment a measurement crosses a threshold the server sends, without being
-asked:
+STATS publica, por ID y sesión:
 
-    ALERT|NODE03|TEMP_HIGH|42.10
+- `attempts`: último total de intentos informado por el emisor.
+- `sent`: sendto completados localmente; **no** acuses de recepción.
+- `omitted`: intentos no enviados por DROP.
+- `send_errors`: intentos con error local de envío.
+- `unique`: secuencias distintas aceptadas durante toda la sesión.
+- `duplicates`: repeticiones de secuencias ya vistas.
+- `reordered`: nuevas secuencias recibidas por debajo del máximo visto.
+- `report_seen`: llegó algún REPORT (el inicial puede tener ceros).
+- `final_report`: el emisor declaró terminado el envío.
+- `loss_estimated`: max(0, sent_reportado - únicas_recibidas_con_seq<attempts_reportado).
 
-This line can arrive at any time, even between a request and its reply, so the client has to
-recognise it by the ALERT prefix and keep it apart (client/telep.py does this). An alert is
-generated once when the value crosses the threshold, not on every datagram while it stays
-high. Alerts go over TCP because they are the critical information of the system: they must
-not be lost or arrive out of order.
+La estimación depende del último reporte TCP y puede bajar si llega un paquete
+atrasado, incluso después de final. No es una pérdida definitiva, ni una medida
+fiable sin reporte final y un tiempo de drenaje documentado. No se cuentan como
+pérdidas de red ni las omisiones ni los errores locales. Un reporte perdido deja
+contadores de emisor desactualizados: comparar el JSON final del nodo con STATS.
 
-## Error codes
+GET_STATUS y `/status` suman estos contadores sobre las sesiones del proceso actual;
+`reports` y `final_reports` indican cuántos nodos reportaron. También contienen:
+`boot_id` (identidad del proceso), uptime, registered, active, alerts, tcp_ok, udp_ok,
+udp_rx, udp_invalid, udp_unknown y slow_disconnected. `udp_rx` cuenta datagramas
+sintácticamente válidos antes de comprobar la sesión; incluye duplicados y sesiones
+desconocidas. `udp_invalid` incluye formato inválido y secuencia posterior a final;
+por ello no debe sumarse ciegamente con udp_rx como total físico del socket.
 
-    ERR|100|BAD_FORMAT     empty line, missing argument or invalid node id
-    ERR|101|UNKNOWN_CMD    command not recognised
-    ERR|102|UNKNOWN_NODE   GET_LAST for a node that is not registered
-    ERR|103|TOO_LONG       line longer than 256 bytes (the whole line is discarded)
-    ERR|104|SERVER_FULL    no room for more nodes (64) or subscribers (32)
+## DROP y DNS
 
-An error never closes the connection; the client can keep sending commands.
+`--drop P`, P entre 0 y 100: se omite el intento k cuando
+`floor((k+1)*P/100)>floor(k*P/100)`. No es azar ni emulación de un router.
+100 intentos con DROP=25 producen 25 omisiones y, sin errores locales, 75 envíos.
+Para demostrar pérdida posterior a sendto, usar datagramas de prueba retenidos
+por un intermediario de ensayo o la prueba local de cola final pendiente;
+no afirmar que DROP produjo pérdida de red.
 
-## Example session
+Cada cinco segundos por defecto (`--dns-refresh`), el nodo abre control TCP
+mediante nueva resolución DNS, repite HELLO y REPORT. Si falla, pausa intentos y
+reintenta. Si cambia boot_id, registra el cierre del segmento anterior en su log,
+genera nueva sesión y reinicia sus contadores. El estado no es comparable entre
+boots; no hay recuperación de estadísticas anteriores. El DNS usa la caché del SO.
 
-    > HELLO|NODE01
-    < OK|REGISTERED
-      (UDP) TELEMETRY|NODE01|0|TEMP=23.90;HUM=61.20;POWER=115.00;VIB=0.35;STATUS=OK
-      (UDP) TELEMETRY|NODE01|1|TEMP=45.10;HUM=60.80;POWER=117.40;VIB=0.33;STATUS=OK
-    > GET_NODES
-    < OK|1
-    < NODE01|ACTIVE|1
-    < END
-    > GET_ALERTS
-    < OK|1
-    < 1789690366|NODE01|TEMP_HIGH|45.10
-    < END
-    > SUBSCRIBE
-    < OK|SUBSCRIBED
-    < ALERT|NODE02|VIB_HIGH|9.00          (pushed by the server a moment later)
-    > GET_LAST|NODE99
-    < ERR|102|UNKNOWN_NODE
-    > BYE
-    < OK|BYE
+## Errores
 
-## HTTP (port 8080, read only)
+100 BAD_FORMAT; 101 UNKNOWN_CMD; 102 UNKNOWN_NODE/sesión desconocida;
+103 TOO_LONG; 104 SERVER_FULL; 105 ID_IN_USE. Formato: `ERR|código|nombre`.
+Una trama completa inválida no termina el servidor ni la conexión TCP. Una trama
+incompleta excediendo tres segundos termina esa conexión. Recursos agotados pueden
+causar cierre inmediato. El cliente debe tolerarlo.
 
-The status page is served over plain HTTP so a browser can open it. GET / returns an HTML
-page; GET /status, /nodes and /alerts return the same information as GET_STATUS, GET_NODES
-and GET_ALERTS in JSON. Anything else returns 404. There is no write access over HTTP; all
-changes go through TELEP.
+## HTTP
+
+GET `/`: HTML real; `/status`: resumen JSON numérico; `/nodes`: ID, sesión,
+actividad, mediciones y objeto statistics; `/alerts`: historial JSON.
+404 ruta desconocida, 405 método distinto de GET, 400 petición inválida,
+408 lectura incompleta, 431 límites de cabecera. `/status` devuelve 503 si TCP o
+UDP no actualizan su latido durante tres segundos. Latidos miden progreso de los
+bucles locales, no disponibilidad desde Internet. Sin nodos, active=0 es normal.
+
+Máximo 16 trabajadores, 2 segundos totales para cabeceras, 64 cabeceras,
+8192 bytes agregados y línea de menos de 1024 bytes. Con capacidad agotada se cierra
+la nueva conexión. Límite de respuesta 65536 bytes, suficiente para los límites
+fijos de nodos/variables/alertas del servidor.

@@ -11,3 +11,8 @@ client/logs/
 
 # SSH keys (AWS Academy labsuser.pem)
 *.pem
+
+# Real captures and personal/manual evidence stay local until reviewed.
+evidence/
+*.pcap
+*.pcapng
