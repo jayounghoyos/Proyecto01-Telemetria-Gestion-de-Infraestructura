@@ -24,8 +24,9 @@ class OperatorWindow:
     def __init__(self, root, connection, hostname):
         self.root = root
         self.connection = connection
-        root.title(f"TELEP/1.0 operator - {hostname}")
+        root.title(f"TELEP/2.0 operator - {hostname}")
         root.geometry("900x560")
+        self.refresh_timer = None
         self.build_widgets()
         self.refresh()
 
@@ -69,15 +70,29 @@ class OperatorWindow:
             table.insert("", "end", values=values, tags=(tag,))
 
     def request(self, command, *fields):
-        """Sends a command; on a network error shows a dialog and closes the window."""
-        try:
-            return self.connection.request(command, *fields)
-        except (OSError, ConnectionError) as error:
-            messagebox.showerror("Connection lost", str(error))
-            self.root.destroy()
-            return None
+        if self.connection.socket is None:
+            raise ConnectionError("disconnected; waiting for retry")
+        reply = self.connection.request(command, *fields)
+        if not reply or reply[0][0] != "OK":
+            raise ValueError("server rejected query: " + repr(reply))
+        return reply
 
     def refresh(self):
+        if self.refresh_timer is not None:
+            self.root.after_cancel(self.refresh_timer)
+            self.refresh_timer = None
+        try:
+            if self.connection.socket is None:
+                self.connection.connect()
+                if not self.connection.subscribe():
+                    raise ConnectionError("subscription rejected")
+            self._refresh()
+        except (OSError, ConnectionError, ValueError, IndexError) as error:
+            self.connection.close()
+            self.status_label.config(text="Disconnected; retry in 3s: " + str(error))
+        self.refresh_timer = self.root.after(REFRESH_MS, self.refresh)
+
+    def _refresh(self):
         pushed = self.connection.take_alerts()
         if pushed:
             _, node_id, alert_type, value = pushed[-1]
@@ -99,13 +114,16 @@ class OperatorWindow:
                       for ts, node_id, alert_type, value in reversed(self.request("GET_ALERTS")[1:])]
         self.replace_rows(self.alert_table, alert_rows)
 
-        self.root.after(REFRESH_MS, self.refresh)
 
     def query_single_node(self):
         node_id = self.node_entry.get().strip()
         if not node_id:
             return
-        reply = self.request("GET_LAST", node_id)
+        try:
+            reply = self.request("GET_LAST", node_id)
+        except (OSError, ConnectionError, ValueError) as error:
+            self.status_label.config(text="Query failed: " + str(error))
+            return
         if reply is None:
             return
         line = reply[0]
@@ -119,7 +137,7 @@ class OperatorWindow:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Graphical operator (TELEP/1.0)")
+    parser = argparse.ArgumentParser(description="Graphical operator (TELEP/2.0)")
     parser.add_argument("--host", default=telep.DEFAULT_HOST, help="server DNS name")
     parser.add_argument("--port", type=int, default=telep.TCP_PORT)
     args = parser.parse_args()
@@ -130,7 +148,7 @@ def main():
         connection.subscribe()
     except OSError as error:
         print(f"could not connect to {args.host}:{args.port}: {error}", file=sys.stderr)
-        sys.exit(1)
+        connection.close()  # Window remains available and retries through refresh().
 
     root = tk.Tk()
     OperatorWindow(root, connection, args.host)

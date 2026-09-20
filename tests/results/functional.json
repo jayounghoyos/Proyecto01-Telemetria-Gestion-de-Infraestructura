@@ -1,0 +1,107 @@
+{
+  "scope": "LOCAL ONLY; no cloud, pcap or individual evidence",
+  "utc": "2026-09-20T02:08:06.801241+00:00",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "tests_run": 14,
+  "success": true,
+  "results": [
+    {
+      "test": "test_system.SystemTests.test_dns_resolved_on_every_connection",
+      "result": "PASS",
+      "seconds": 0.029
+    },
+    {
+      "test": "test_system.SystemTests.test_gui_mid_refresh_failures",
+      "result": "PASS",
+      "seconds": 0.048
+    },
+    {
+      "test": "test_system.SystemTests.test_gui_reconnect_controller",
+      "result": "PASS",
+      "seconds": 0.027
+    },
+    {
+      "test": "test_system.SystemTests.test_http_absolute_deadline",
+      "result": "PASS",
+      "seconds": 2.026
+    },
+    {
+      "test": "test_system.SystemTests.test_http_routes_and_slow_headers",
+      "result": "PASS",
+      "seconds": 2.031
+    },
+    {
+      "test": "test_system.SystemTests.test_invalid_client_arguments",
+      "result": "PASS",
+      "seconds": 0.376
+    },
+    {
+      "test": "test_system.SystemTests.test_node_known_drop",
+      "result": "PASS",
+      "seconds": 0.303
+    },
+    {
+      "test": "test_system.SystemTests.test_node_recovers_after_server_restart",
+      "result": "PASS",
+      "seconds": 4.626
+    },
+    {
+      "test": "test_system.SystemTests.test_node_without_drop",
+      "result": "PASS",
+      "seconds": 0.316
+    },
+    {
+      "test": "test_system.SystemTests.test_slow_subscriber_queue_does_not_block_udp",
+      "result": "PASS",
+      "seconds": 0.458
+    },
+    {
+      "test": "test_system.SystemTests.test_stats_duplicates_reordering_and_late_tail",
+      "result": "PASS",
+      "seconds": 0.03
+    },
+    {
+      "test": "test_system.SystemTests.test_tcp_validation_and_recovery",
+      "result": "PASS",
+      "seconds": 0.028
+    },
+    {
+      "test": "test_system.SystemTests.test_two_operators_alerts_while_udp_continues",
+      "result": "PASS",
+      "seconds": 2.64
+    },
+    {
+      "test": "test_system.SystemTests.test_udp_validation",
+      "result": "PASS",
+      "seconds": 0.027
+    }
+  ],
+  "source_sha256": {
+    "server/alert_subscribers.c": "620ae3aad0413766f1d690e28d8bbb82418c0720f70229797015657072fe5b8b",
+    "server/alert_subscribers.h": "e60b1a96c65247116c0e68d73a8b7e24d917b9d77defad5f2119a68eb3ed7686",
+    "server/config.h": "0b6c63732124c878da247a32b33897941a301984930829f1276906add5336b51",
+    "server/http_status_server.c": "a813e44387235056e2beafacb57819a9850e792bc1a3bc94c6f14b576abcb957",
+    "server/main.c": "6517ba28e973d8c42198ce82a79e9d85fbdb64a9f4c735fc124b42c30855bf31",
+    "server/node_registry.c": "6e08bbfb457a7e9218154399d917c850e7f0e39d9bb0ecf417d9a8810456979d",
+    "server/node_registry.h": "f201d75bcb0e799a6d31b82a7d0755ef4c4e617dd9f6fc6b59c749596e3c2e64",
+    "server/response_format.c": "46b0732036a014660f016171db39be7274ff1c533d6adb6609440a4f620c392d",
+    "server/response_format.h": "1ad1780be92cfaed8c6529adf127e8dba447d93ea766f36fb4df59fc9f3b986c",
+    "server/server_threads.h": "d59fc23cc7b5518da381370fb721a98319e880ab70ebabe74f5cb7508892f349",
+    "server/service_health.c": "d6228d4e1a7159f7f8c381babfba178514c22cf65498927c5adc15cea71d7356",
+    "server/service_health.h": "a4d74b19efc2b19a311a942a02d4ec6fe5dde4488da2fd37d82dfc5e1585cf09",
+    "server/socket_helpers.c": "99e868fbfedd33c74a2faca7bfbbb94fe756073c4fd50439c77b89dc7581d215",
+    "server/socket_helpers.h": "f1ad3829b4c72f80f652dc464a725bb89404688c56374798046137171be15176",
+    "server/tcp_command_server.c": "9a4eed1b109443d04fd2186f8e51819b3386479c2ac1ab9f133d4e1d1c1747f5",
+    "server/telep_protocol.c": "da9285e02ea49b95e664d332f6156ee977c239aa46f629065bfd0216b51dca47",
+    "server/telep_protocol.h": "1e7c348a9d0966c021809d86cb454c919c1e2f5be73f5095c2e22e15c6f3dedc",
+    "server/udp_telemetry_server.c": "f75e646b5c85451cb2b4b7f4b6952c493d4291fc54f3ecf4a14fd4fb905b049b",
+    "client/node.py": "28a30505dce923ba9e9d61a17b30a928654929d59565aab3cd544767c28c05c9",
+    "client/operator_cli.py": "f16c8ac9fdce4705d00fa875fe57b90407bcabf079b854d76a07d5d2bd19a6a5",
+    "client/operator_gui.py": "ad3610fda396fe3e618d77cbb55928d0a49db78e90e4a459af44080736f20079",
+    "client/telep.py": "901e3b7f765f0ffc0b2f3169a6c605407ccb3671b78b5738e0f8c9222dc2f95c",
+    "tests/end_to_end.py": "08697d33a141ecb3d037dd38a279d1f1591c3e7b4038aa22946a026eccb1c11f",
+    "tests/run.py": "c4b1a223bf21b50e229b03f019b79fdc97854ff875e70b749751e8229c6714c8",
+    "tests/test_system.py": "c652ecb3f6d204dd5c65c898429f929faae87ac4bf211ed4ea194c043d25d796"
+  }
+}

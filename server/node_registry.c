@@ -4,11 +4,14 @@
 #include <string.h>
 
 static RegistrySnapshot registry;
+static unsigned char seen[MAX_NODES][SESSION_LIMIT / 8];
 static pthread_mutex_t  registry_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void registry_init(void) {
     memset(&registry, 0, sizeof registry);
     registry.started_at = time(NULL);
+    struct timespec now; clock_gettime(CLOCK_REALTIME, &now);
+    registry.boot_id = now.tv_sec * 1000000000L + now.tv_nsec;
 }
 
 static TelemetryNode *find_node(const char *node_id) {
@@ -32,24 +35,49 @@ static TelemetryNode *create_node(const char *node_id) {
     return NULL;
 }
 
-/* A repeated HELLO means the node restarted: its sequence and loss
- * counters go back to zero so STATS reflects only the current session. */
-int registry_register_node(const char *node_id) {
+/* An ID belongs to one session for this server lifetime. Same-session HELLO is idempotent. */
+int registry_register_node(const char *node_id, const char *session) {
     pthread_mutex_lock(&registry_mutex);
+    TelemetryNode *node = find_node(node_id);
     int result = 0;
-    TelemetryNode *existing = find_node(node_id);
-    if (existing) {
-        existing->last_sequence = -1;
-        existing->datagrams_received = 0;
-        existing->datagrams_lost = 0;
-        printf("[registry] node re-registered: %s\n", node_id);
-    } else if (create_node(node_id)) {
-        printf("[registry] node registered: %s\n", node_id);
-    } else {
-        result = -1;
+    if (node && strcmp(node->session, session)) result = ERR_ID_IN_USE;
+    else if (!node) {
+        node = create_node(node_id);
+        if (!node) result = ERR_SERVER_FULL;
+        else strcpy(node->session, session);
     }
-    pthread_mutex_unlock(&registry_mutex);
-    return result;
+    pthread_mutex_unlock(&registry_mutex); return result;
+}
+void registry_invalid_datagram(void) {
+    pthread_mutex_lock(&registry_mutex); registry.datagrams_invalid++; pthread_mutex_unlock(&registry_mutex);
+}
+static void update_loss(TelemetryNode *node) {
+    long received_in_report = 0;
+    int index = (int)(node - registry.nodes);
+    for (long seq = 0; seq < node->attempts; seq++)
+        received_in_report += !!(seen[index][seq / 8] & (1u << (seq % 8)));
+    node->datagrams_lost = node->sent > received_in_report ? node->sent - received_in_report : 0;
+}
+int registry_report(const char *id, const char *session, long attempts, long sent, long omitted, long errors, int final) {
+    pthread_mutex_lock(&registry_mutex);
+    TelemetryNode *n = find_node(id);
+    int result = 0;
+    if (!n || strcmp(n->session, session)) result = ERR_UNKNOWN_NODE;
+    else if (attempts != sent + omitted + errors || attempts < n->attempts || sent < n->sent ||
+             omitted < n->omitted || errors < n->send_errors ||
+             (final && n->last_sequence >= attempts) ||
+             (n->final_report && (attempts != n->attempts || sent != n->sent ||
+              omitted != n->omitted || errors != n->send_errors || !final))) result = ERR_BAD_FORMAT;
+    else {
+        long received = 0;
+        int index = (int)(n - registry.nodes);
+        for (long seq = 0; seq < attempts; seq++)
+            received += !!(seen[index][seq / 8] & (1u << (seq % 8)));
+        if (received > sent) { pthread_mutex_unlock(&registry_mutex); return ERR_BAD_FORMAT; }
+        n->attempts = attempts; n->sent = sent; n->omitted = omitted; n->send_errors = errors;
+        n->report_seen = 1; n->final_report = final; update_loss(n);
+    }
+    pthread_mutex_unlock(&registry_mutex); return result;
 }
 
 /* Upper threshold per variable (config.h). 0 = the variable never raises an alert. */
@@ -86,28 +114,31 @@ static Alert *add_alert(const char *node_id, const char *variable_name, const ch
     return alert;
 }
 
-int registry_record_telemetry(const char *node_id, long sequence, const Measurement *values, int count, Alert *new_alerts) {
+int registry_record_telemetry(const char *node_id, const char *session, long sequence, const Measurement *values, int count, Alert *new_alerts) {
     int new_alert_count = 0;
     pthread_mutex_lock(&registry_mutex);
     registry.datagrams_total++;
     TelemetryNode *node = find_node(node_id);
-    if (!node) {
-        /* Telemetry from a node that never sent HELLO: usually the server was
-         * restarted (e.g. docker restart). Register it so its data is not lost. */
+    if (!node || strcmp(node->session, session)) {
         registry.datagrams_unknown_node++;
-        node = create_node(node_id);
-        if (!node) { pthread_mutex_unlock(&registry_mutex); return -1; }
-        printf("[registry] node auto-registered from telemetry: %s\n", node_id);
+        pthread_mutex_unlock(&registry_mutex); return -1;
     }
-
-    /* UDP loss = a small gap in seq. A huge jump or a step back is not a loss:
-     * the node restarted or two processes share the id; count it as a resync. */
-    long gap = node->last_sequence >= 0 ? sequence - node->last_sequence - 1 : 0;
-    if (gap > 0 && gap <= MAX_SEQUENCE_GAP) node->datagrams_lost += gap;
-    else if (gap > MAX_SEQUENCE_GAP || sequence <= node->last_sequence) node->resyncs++;
-    node->last_sequence = sequence;
+    if (node->final_report && sequence >= node->attempts) {
+        registry.datagrams_invalid++; pthread_mutex_unlock(&registry_mutex); return -1;
+    }
+    unsigned char *byte = &seen[node - registry.nodes][sequence / 8];
+    unsigned char mask = (unsigned char)(1u << (sequence % 8));
+    if (*byte & mask) {
+        node->duplicates++; pthread_mutex_unlock(&registry_mutex); return 0;
+    }
+    *byte |= mask;
     node->datagrams_received++;
     node->last_seen = time(NULL);
+    update_loss(node);
+    if (sequence < node->last_sequence) {
+        node->reordered++; pthread_mutex_unlock(&registry_mutex); return 0;
+    }
+    node->last_sequence = sequence;
 
     /* Alert only when a value crosses its threshold: if the previous
      * measurement was already anomalous, do not repeat the alert. */
