@@ -3,8 +3,8 @@
 Python node.py → UDP 5001 → receptor C → registro protegido por mutex.
 Python CLI/GUI → TCP 5000 → un hilo por cliente → snapshots del registro.
 Navegador → HTTP 8080 → hasta 16 trabajadores → snapshot/JSON/HTML.
-Los diagramas en diagrams/ son históricos de TELEP/1; deben actualizarse antes
-del informe final para incluir colas, sesiones y REPORT. No acreditan ejecución.
+Los diagramas numerados de `diagrams/` acompañan a este documento: componentes y
+transportes, hilos del servidor, flujo de una alerta y despliegue de red.
 
 ## Hilos y propiedad
 
@@ -27,8 +27,8 @@ fuera de los snapshots. Memoria acotada; no hay almacenamiento persistente.
 Un ID está ligado a su sesión hasta terminar el proceso. Duplicados no actualizan
 mediciones; reordenamientos corrigen recepción/pérdida sin retroceder datos.
 REPORT lleva contadores del emisor. STATS y HTTP muestran exactamente su alcance.
-Los latidos de los bucles TCP/UDP sustituyen el rótulo fijo ONLINE. No garantizan
-conectividad pública, salud del DNS ni persistencia.
+Los latidos de los bucles TCP/UDP sustituyen el rótulo fijo ONLINE: indican que
+cada bucle sigue progresando, no que el servicio sea alcanzable desde Internet.
 
 ## Recuperación
 
