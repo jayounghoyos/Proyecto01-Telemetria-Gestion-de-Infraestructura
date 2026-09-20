@@ -16,3 +16,6 @@ client/logs/
 evidence/
 *.pcap
 *.pcapng
+
+# Salidas generadas por tests/run.py y end_to_end.py
+tests/results/local-*/

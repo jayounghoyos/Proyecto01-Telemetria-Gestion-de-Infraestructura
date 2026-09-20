@@ -202,7 +202,7 @@
               "y": 64,
               "name": "dns rec",
               "fill": "#64748B",
-              "content": "A → 13.218.65.204 (today)",
+              "content": "A → instance's current public IP",
               "fontFamily": "Inter",
               "fontSize": 10,
               "fontWeight": "normal"
@@ -418,7 +418,7 @@
               "y": 180,
               "name": "EC2",
               "width": 440,
-              "height": 240,
+              "height": 258,
               "fill": "#FFFFFF",
               "cornerRadius": 12,
               "stroke": "#FDBA74",
@@ -572,7 +572,7 @@
                   "y": 124,
                   "name": "container",
                   "width": 408,
-                  "height": 100,
+                  "height": 118,
                   "fill": "#EFF6FF",
                   "cornerRadius": 12,
                   "stroke": "#60A5FA",
@@ -622,7 +622,19 @@
                       "y": 57,
                       "name": "dk l1",
                       "fill": "#1E40AF",
-                      "content": "./telemetry_server (C) + web/index.html",
+                      "content": "./telemetry_server (C) · status page generated in C",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "IffkP",
+                      "x": 12,
+                      "y": 74,
+                      "name": "dk l3",
+                      "fill": "#1E40AF",
+                      "content": "image: debian bookworm in both build stages · runs as non-root UID 10001",
                       "fontFamily": "Inter",
                       "fontSize": 10,
                       "fontWeight": "normal"
@@ -631,7 +643,7 @@
                       "type": "text",
                       "id": "WhbpG",
                       "x": 12,
-                      "y": 74,
+                      "y": 91,
                       "name": "dk l2",
                       "fill": "#1E40AF",
                       "content": "deployed with deploy/deploy.sh (rsync + docker compose up --build)",
@@ -916,12 +928,24 @@
               "y": 172,
               "name": "verified",
               "fill": "#94A3B8",
-              "content": "Observed 2026-09-19: IP changed 34.226.153.93 → 13.218.65.204, no client change.",
+              "content": "Observed 2026-09-19: the public IP changed on restart, no client change.",
               "fontFamily": "Inter",
               "fontSize": 10,
               "fontWeight": "normal"
             }
           ]
+        },
+        {
+          "type": "text",
+          "id": "oAbPN",
+          "x": 40,
+          "y": 518,
+          "name": "protocol note",
+          "fill": "#64748B",
+          "content": "The deployed protocol must match the clients: moving to TELEP/2 means redeploying with deploy/deploy.sh.",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
         }
       ]
     }

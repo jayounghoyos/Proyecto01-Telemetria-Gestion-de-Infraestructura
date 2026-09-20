@@ -42,8 +42,8 @@ La primera orden prueba HTTP, sesiones/estadísticas, errores, alertas, dos
 operadores, suscriptor lento, recuperación y controlador GUI sin pantalla.
 La segunda ejecuta cinco procesos reales de `node.py` y dos conexiones persistentes
 de operador durante al menos 120 segundos, comprueba actividad, alertas y conteos.
-Los resultados reales se escriben en `tests/results/`; no son evidencia de nube,
-Docker, interfaces visuales ni participación individual.
+El resumen de la última ejecución, con los hashes de las fuentes, queda en
+`tests/results/functional.json`.
 
 ## DROP y STATS
 
@@ -69,15 +69,17 @@ curl --max-time 5 http://localhost:8080/status
 Véanse [DEPLOY](docs/DEPLOY.md), [guía de evidencias](docs/EVIDENCE_GUIDE.md),
 [protocolo](docs/PROTOCOL.md), [arquitectura](docs/ARCHITECTURE.md) y
 [plantilla de informe](docs/REPORT_TEMPLATE.md).
-Los cambios locales no se publican ni despliegan automáticamente. No ejecutar
-scripts remotos hasta tener autorización y un entorno de ensayo apropiado.
+
+El servidor está desplegado en una instancia EC2 y se alcanza por su nombre DNS,
+`telemetria-eafit.duckdns.org`. `deploy/deploy.sh` sube el código, construye la
+imagen en la instancia y recrea el contenedor; el procedimiento completo, con las
+reglas del grupo de seguridad, está en [DEPLOY](docs/DEPLOY.md).
 
 ## Límites explícitos
 
 TELEP/2 cambia HELLO y TELEMETRY respecto de TELEP/1: actualizar servidor y clientes
 juntos. Estado en memoria, sin autenticación, 64 IDs por proceso, 65536 intentos
 por sesión, hasta 32 suscriptores, 64 clientes TCP y 16 trabajadores HTTP.
-La GUI reintenta tras errores y conserva su ventana; una operación de red aún puede
-ocupar el hilo gráfico hasta el timeout de cinco segundos. Su aspecto visual requiere
-prueba manual. No grabar el video definitivo hasta aprobar las pruebas funcionales 1–4
-(ver guía), y obtener después las evidencias de nube e individuales.
+La GUI reintenta tras errores y conserva su ventana; como sus consultas son
+síncronas, una operación de red puede ocupar el hilo gráfico hasta el timeout de
+cinco segundos.

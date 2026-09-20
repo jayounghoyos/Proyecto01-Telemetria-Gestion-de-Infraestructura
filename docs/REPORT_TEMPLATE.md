@@ -13,8 +13,10 @@ Contexto, alcance, objetivo, variables y criterios de éxito: [PENDIENTE].
 
 ## 3. Arquitectura
 
-Figura 1: diagrama actualizado de componentes y transportes [PENDIENTE].
-Figura 2: hilos, colas y mutex [PENDIENTE]. Explicar ambas figuras.
+Figura 1: arquitectura y transportes — `docs/diagrams/01-architecture.png`.
+Figura 2: hilos, colas y mutex — `docs/diagrams/02-server-threads.png`.
+Figura 3: flujo de una alerta — `docs/diagrams/03-alert-flow.png`.
+Las tres, con su pie explicativo, están en `docs/ARCHITECTURE.md`.
 
 ## 4. Protocolo
 
@@ -34,7 +36,8 @@ Referencias a resultados locales reales y límites de su extrapolación [PENDIEN
 
 Instancia/región, SO, commit desplegado, imagen/digest, puertos/reglas, resolución
 DNS y cliente externo [PENDIENTE]. Evidencia Docker en nube separada de local.
-No incluir secretos. Figura 3: contenedor en nube; Figura 4: DNS y acceso externo.
+No incluir secretos. Figura 4: red, grupo de seguridad y DNS —
+`docs/diagrams/04-network-deployment.png`, explicada en `docs/ARCHITECTURE.md`.
 
 ## 8. Wireshark
 
@@ -44,7 +47,8 @@ Archivo de captura original: [PENDIENTE]. Equipo/interfaz/fecha: [PENDIENTE].
 |---|---|---|---|---|---|---|
 | [PENDIENTE] | | | | | | |
 
-Figuras 5–7: handshake TCP, Follow TCP Stream, datagrama UDP [PENDIENTE].
+Figuras 5–7: handshake TCP, Follow TCP Stream, datagrama UDP [PENDIENTE:
+capturar con `scripts/capture_traffic.sh` contra el servidor desplegado].
 Explicar relación entre aplicación, transporte y red, y limitaciones de captura.
 
 ## 9. Pruebas y resultados

@@ -1,0 +1,62 @@
+#ifndef STATUS_PAGE_CSS_H
+#define STATUS_PAGE_CSS_H
+
+/* Stylesheet for the HTML status page, embedded so the server stays a single
+ * self-contained binary (no static files, no external fonts or CDNs).
+ * Written with single quotes only, so it is safe inside a C string literal.
+ * It is appended with "%s", never as a printf format, so "%" is allowed. */
+static const char STATUS_PAGE_CSS[] =
+    ":root{color-scheme:light dark;--bg:#f6f5f1;--surface:#fff;--line:#e7e4dc;--text:#1c1b19;--muted:#6b675f;--accent:#0f5c56;--ok-bg:#e4f1e8;--ok-fg:#1d6a39;--bad-bg:#fbe8e5;--bad-fg:#a12d24;--warn-bg:#fbf0d6;--warn-fg:#855600}\n"
+    "@media (prefers-color-scheme:dark){:root{--bg:#141412;--surface:#1c1b19;--line:#2d2b27;--text:#ece9e2;--muted:#9c978c;--accent:#5fbfb3;--ok-bg:#1a2c20;--ok-fg:#7fd39a;--bad-bg:#35201d;--bad-fg:#f1a59c;--warn-bg:#332915;--warn-fg:#e6b95a}}\n"
+    "*{box-sizing:border-box}\n"
+    "body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased}\n"
+    ".wrap{max-width:1080px;margin:0 auto;padding:44px 24px 72px}\n"
+    ".top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:28px}\n"
+    "h1{margin:0;font-size:28px;line-height:1.15;font-weight:650;letter-spacing:-.02em}\n"
+    "h1::before{content:'';display:inline-block;width:10px;height:10px;margin-right:12px;border-radius:2px;background:var(--accent);vertical-align:middle;position:relative;top:-2px}\n"
+    ".sub{margin:8px 0 0;color:var(--muted);font-size:14px}\n"
+    ".health{display:flex;gap:8px;flex-wrap:wrap}\n"
+    ".badge{display:inline-flex;align-items:center;gap:7px;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;background:var(--ok-bg);color:var(--ok-fg)}\n"
+    ".badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}\n"
+    ".badge.bad{background:var(--bad-bg);color:var(--bad-fg)}\n"
+    ".badge.warn{background:var(--warn-bg);color:var(--warn-fg)}\n"
+    ".badge.plain::before{display:none}\n"
+    ".kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}\n"
+    ".kpi{padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:10px}\n"
+    ".kpi span{display:block;color:var(--muted);font-size:12.5px}\n"
+    ".kpi strong{display:block;margin-top:4px;font-size:28px;line-height:1.1;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}\n"
+    ".kpi.hot strong{color:var(--bad-fg)}\n"
+    "section{margin-top:40px}\n"
+    "h2{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:-.01em}\n"
+    "h2 small{color:var(--muted);font-size:13px;font-weight:500}\n"
+    ".card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}\n"
+    ".scroll{overflow-x:auto}\n"
+    "table{width:100%;border-collapse:collapse;font-size:14px}\n"
+    "th{padding:10px 16px;text-align:left;color:var(--muted);font-size:12px;font-weight:500;white-space:nowrap;border-bottom:1px solid var(--line)}\n"
+    "td{padding:12px 16px;vertical-align:middle;border-bottom:1px solid var(--line)}\n"
+    "tr:last-child td{border-bottom:0}\n"
+    "tbody tr:hover{background:rgba(127,127,127,.06)}\n"
+    ".mono,.id,.num,.chip,.kv dt,.kv dd,.links a{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}\n"
+    ".id{font-weight:600}\n"
+    ".num{font-variant-numeric:tabular-nums;white-space:nowrap}\n"
+    ".muted{color:var(--muted)}\n"
+    ".chips{display:flex;flex-wrap:wrap;gap:6px}\n"
+    ".chip{padding:3px 8px;background:var(--bg);border:1px solid var(--line);border-radius:6px;font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}\n"
+    ".chip b{margin-right:6px;color:var(--muted);font-weight:500}\n"
+    ".chip.hot{background:var(--bad-bg);border-color:transparent;color:var(--bad-fg)}\n"
+    ".chip.hot b{color:inherit;opacity:.75}\n"
+    ".empty{padding:32px 16px;text-align:center;color:var(--muted)}\n"
+    "details.card summary{padding:13px 16px;font-weight:500;cursor:pointer;list-style:none}\n"
+    "details.card summary::-webkit-details-marker{display:none}\n"
+    "details.card summary::after{content:'+';float:right;color:var(--muted)}\n"
+    "details.card[open] summary::after{content:'\\2212'}\n"
+    ".kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px 20px;margin:0;padding:16px;border-top:1px solid var(--line)}\n"
+    ".kv dt{color:var(--muted);font-size:12px}\n"
+    ".kv dd{margin:2px 0 0;font-size:13.5px;font-variant-numeric:tabular-nums;word-break:break-all}\n"
+    ".links{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:40px;color:var(--muted);font-size:13px}\n"
+    ".links a{padding:4px 10px;background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:12.5px;text-decoration:none}\n"
+    ".links a:hover{border-color:var(--accent);color:var(--accent)}\n"
+    "a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}\n"
+    "@media (max-width:640px){.wrap{padding:26px 14px 56px}h1{font-size:23px}th,td{padding:10px 12px}.kpi strong{font-size:24px}h2{flex-wrap:wrap;gap:2px 10px}.kv{grid-template-columns:repeat(2,1fr)}.stack thead{display:none}.stack tr{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 12px;padding:14px;border-bottom:1px solid var(--line)}.stack tr:last-child{border-bottom:0}.stack td{padding:0;border:0}.stack td:nth-child(2){justify-self:end}.stack td:nth-child(3){grid-column:1/-1;color:var(--muted);font-size:12.5px}.stack td:nth-child(4){grid-column:1/-1}}\n";
+
+#endif

@@ -9,7 +9,7 @@
       "name": "Figure 2 - Server threads",
       "clip": true,
       "width": 1100,
-      "height": 560,
+      "height": 710,
       "fill": "#F8FAFC",
       "layout": "none",
       "children": [
@@ -32,7 +32,7 @@
           "y": 56,
           "name": "Subtitle",
           "fill": "#64748B",
-          "content": "One fixed thread per service, one thread per accepted TCP connection, shared state guarded by a single mutex",
+          "content": "One accept loop per service · one thread per TCP connection · a bounded pool of HTTP workers · shared state guarded by a single mutex",
           "fontFamily": "Inter",
           "fontSize": 13,
           "fontWeight": "normal"
@@ -94,7 +94,7 @@
           "y": 210,
           "name": "UDP thread",
           "width": 260,
-          "height": 96,
+          "height": 145,
           "fill": "#FFFBEB",
           "cornerRadius": 12,
           "stroke": "#FCD34D",
@@ -109,16 +109,19 @@
             },
             "blur": 6
           },
-          "layout": "none",
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 14,
           "children": [
             {
               "type": "text",
               "id": "NW8la",
-              "x": 16,
-              "y": 14,
               "name": "UDP thread title",
               "fill": "#92400E",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "UDP thread · udp_telemetry_server.c",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 13,
               "fontWeight": "bold"
@@ -126,11 +129,12 @@
             {
               "type": "text",
               "id": "aoWnE",
-              "x": 16,
-              "y": 36,
               "name": "UDP thread l1",
               "fill": "#78350F",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "for(;;) recvfrom(:5001)",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -138,11 +142,12 @@
             {
               "type": "text",
               "id": "UvEAZ",
-              "x": 16,
-              "y": 53,
               "name": "UDP thread l2",
               "fill": "#78350F",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "parse_message → parse_measurements",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -150,11 +155,25 @@
             {
               "type": "text",
               "id": "vIn14",
-              "x": 16,
-              "y": 70,
               "name": "UDP thread l3",
               "fill": "#78350F",
-              "content": "registry_record_telemetry → push ALERT",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "registry_record_telemetry → enqueue ALERT",
+              "lineHeight": 1.35,
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "NgSSq",
+              "name": "line 4",
+              "fill": "#78350F",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "never blocks on a slow subscriber",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -168,7 +187,7 @@
           "y": 210,
           "name": "TCP thread",
           "width": 260,
-          "height": 96,
+          "height": 145,
           "fill": "#EFF6FF",
           "cornerRadius": 12,
           "stroke": "#93C5FD",
@@ -183,16 +202,19 @@
             },
             "blur": 6
           },
-          "layout": "none",
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 14,
           "children": [
             {
               "type": "text",
               "id": "d19fq",
-              "x": 16,
-              "y": 14,
               "name": "TCP thread title",
               "fill": "#1E3A8A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "TCP thread · tcp_command_server.c",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 13,
               "fontWeight": "bold"
@@ -200,11 +222,12 @@
             {
               "type": "text",
               "id": "kke0u",
-              "x": 16,
-              "y": 36,
               "name": "TCP thread l1",
               "fill": "#1E40AF",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "for(;;) accept(:5000)",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -212,11 +235,12 @@
             {
               "type": "text",
               "id": "aY7Ol",
-              "x": 16,
-              "y": 53,
               "name": "TCP thread l2",
               "fill": "#1E40AF",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "pthread_create(serve_client) + detach",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -224,11 +248,25 @@
             {
               "type": "text",
               "id": "O4UGV",
-              "x": 16,
-              "y": 70,
               "name": "TCP thread l3",
               "fill": "#1E40AF",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "caps 64 simultaneous connections",
+              "lineHeight": 1.35,
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "S61mwl",
+              "name": "line 4",
+              "fill": "#1E40AF",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "never blocks on a slow client",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -242,7 +280,7 @@
           "y": 210,
           "name": "HTTP thread",
           "width": 260,
-          "height": 96,
+          "height": 145,
           "fill": "#F0FDF4",
           "cornerRadius": 12,
           "stroke": "#86EFAC",
@@ -257,16 +295,19 @@
             },
             "blur": 6
           },
-          "layout": "none",
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 14,
           "children": [
             {
               "type": "text",
               "id": "IE9Qc",
-              "x": 16,
-              "y": 14,
               "name": "HTTP thread title",
               "fill": "#14532D",
-              "content": "HTTP thread · http_status_server.c",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "HTTP threads · http_status_server.c",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 13,
               "fontWeight": "bold"
@@ -274,11 +315,12 @@
             {
               "type": "text",
               "id": "TgS8M",
-              "x": 16,
-              "y": 36,
               "name": "HTTP thread l1",
               "fill": "#166534",
-              "content": "for(;;) accept(:8080)",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "for(;;) accept(:8080) · up to 16 workers",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -286,11 +328,12 @@
             {
               "type": "text",
               "id": "VWhJa",
-              "x": 16,
-              "y": 53,
               "name": "HTTP thread l2",
               "fill": "#166534",
-              "content": "GET / → web/index.html",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "GET / → HTML generated in C",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -298,11 +341,38 @@
             {
               "type": "text",
               "id": "iBKPr",
-              "x": 16,
-              "y": 70,
               "name": "HTTP thread l3",
               "fill": "#166534",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "CSS embedded in status_page_css.h",
+              "lineHeight": 1.35,
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "NJKGN",
+              "name": "line 4",
+              "fill": "#166534",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "GET /status /nodes /alerts → JSON",
+              "lineHeight": 1.35,
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "ORdPF",
+              "name": "line 5",
+              "fill": "#166534",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "absolute deadline per request",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
@@ -421,7 +491,7 @@
           "type": "frame",
           "id": "ap5sa",
           "x": 380,
-          "y": 340,
+          "y": 390,
           "name": "client thread 1",
           "width": 106,
           "height": 58,
@@ -461,7 +531,7 @@
           "type": "frame",
           "id": "c2rYEG",
           "x": 497,
-          "y": 340,
+          "y": 390,
           "name": "client thread 2",
           "width": 106,
           "height": 58,
@@ -501,7 +571,7 @@
           "type": "frame",
           "id": "ur9E6",
           "x": 614,
-          "y": 340,
+          "y": 390,
           "name": "client thread n",
           "width": 106,
           "height": 58,
@@ -543,7 +613,7 @@
           "x": 0,
           "y": 0,
           "name": "tcp-c1",
-          "geometry": "M520 306l-74 30",
+          "geometry": "M520 355l-74 31",
           "viewBox": [
             0,
             0,
@@ -560,7 +630,7 @@
           "type": "path",
           "id": "pUHoF",
           "x": 440,
-          "y": 329.56701115819243,
+          "y": 379.567,
           "name": "h4",
           "geometry": "M0 10.43299l9.80575-10.43299 4.49528 11.12621z",
           "viewBox": [
@@ -579,7 +649,7 @@
           "x": 0,
           "y": 0,
           "name": "tcp-c2",
-          "geometry": "M550 306l0 28",
+          "geometry": "M550 355l0 29",
           "viewBox": [
             0,
             0,
@@ -596,7 +666,7 @@
           "type": "path",
           "id": "aAiJ6",
           "x": 544,
-          "y": 327,
+          "y": 377,
           "name": "h5",
           "geometry": "M6 13l-6-13 12 0z",
           "viewBox": [
@@ -615,7 +685,7 @@
           "x": 0,
           "y": 0,
           "name": "tcp-c3",
-          "geometry": "M580 306l74 30",
+          "geometry": "M580 355l74 31",
           "viewBox": [
             0,
             0,
@@ -632,7 +702,7 @@
           "type": "path",
           "id": "ykkPw",
           "x": 645.6989703301363,
-          "y": 329.56701115819243,
+          "y": 379.567,
           "name": "h6",
           "geometry": "M14.30103 10.43299l-14.30103 0.69322 4.49528-11.12621z",
           "viewBox": [
@@ -648,8 +718,8 @@
         {
           "type": "text",
           "id": "P0MnRW",
-          "x": 590,
-          "y": 412,
+          "x": 560,
+          "y": 455,
           "name": "client note",
           "fill": "#64748B",
           "content": "per client: receive_text_line → handle_command → send_text_line; BYE → close()",
@@ -661,10 +731,10 @@
           "type": "frame",
           "id": "gykDB",
           "x": 60,
-          "y": 440,
+          "y": 490,
           "name": "registry",
-          "width": 640,
-          "height": 90,
+          "width": 540,
+          "height": 145,
           "fill": "#FFFFFF",
           "cornerRadius": 12,
           "stroke": "#CBD5E1",
@@ -679,13 +749,15 @@
             },
             "blur": 6
           },
-          "layout": "none",
+          "gap": 12,
+          "padding": [
+            14,
+            16
+          ],
           "children": [
             {
               "type": "icon",
               "id": "jkh0m",
-              "x": 16,
-              "y": 14,
               "name": "lock",
               "width": 24,
               "height": 24,
@@ -694,51 +766,77 @@
               "fill": "#64748B"
             },
             {
-              "type": "text",
-              "id": "Q2EaTA",
-              "x": 50,
-              "y": 16,
-              "name": "reg title",
-              "fill": "#0F172A",
-              "content": "node_registry.c · one pthread_mutex_t",
-              "fontFamily": "Inter",
-              "fontSize": 13,
-              "fontWeight": "bold"
-            },
-            {
-              "type": "text",
-              "id": "kuhAb",
-              "x": 50,
-              "y": 38,
-              "name": "reg l1",
-              "fill": "#334155",
-              "content": "Writers: UDP thread (telemetry, alerts), client threads (HELLO). Readers: client and HTTP threads.",
-              "fontFamily": "Inter",
-              "fontSize": 10,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "B1JFD",
-              "x": 50,
-              "y": 56,
-              "name": "reg l2",
-              "fill": "#334155",
-              "content": "Readers copy a snapshot under the mutex and format the reply outside it → nodes never wait for slow operators.",
-              "fontFamily": "Inter",
-              "fontSize": 10,
-              "fontWeight": "normal"
+              "type": "frame",
+              "id": "pN2DD",
+              "name": "registry text",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Q2EaTA",
+                  "name": "reg title",
+                  "fill": "#0F172A",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "node_registry.c · one pthread_mutex_t",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "kuhAb",
+                  "name": "reg l1",
+                  "fill": "#334155",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Writers: UDP thread (telemetry, alerts), client threads (HELLO). Readers: client and HTTP threads.",
+                  "lineHeight": 1.4,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "B1JFD",
+                  "name": "reg l2",
+                  "fill": "#334155",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Readers copy a snapshot under the mutex and format the reply outside it → nodes never wait for slow operators.",
+                  "lineHeight": 1.4,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "IbrnG",
+                  "name": "reg l3",
+                  "fill": "#334155",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Per-node session id + sequence bitmap → duplicated and out-of-order datagrams are detected.",
+                  "lineHeight": 1.4,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
             }
           ]
         },
         {
           "type": "frame",
           "id": "RsIEI",
-          "x": 780,
-          "y": 440,
+          "x": 620,
+          "y": 490,
           "name": "subscribers",
-          "width": 260,
-          "height": 90,
+          "width": 420,
+          "height": 145,
           "fill": "#FDF2F8",
           "cornerRadius": 12,
           "stroke": "#F9A8D4",
@@ -753,16 +851,22 @@
             },
             "blur": 6
           },
-          "layout": "none",
+          "layout": "vertical",
+          "gap": 5,
+          "padding": [
+            14,
+            16
+          ],
           "children": [
             {
               "type": "text",
               "id": "PGQqQ",
-              "x": 16,
-              "y": 16,
               "name": "sub title",
               "fill": "#831843",
-              "content": "alert_subscribers.c · own mutex",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "alert_subscribers.c · own mutex · bounded queues",
+              "lineHeight": 1.35,
               "fontFamily": "Inter",
               "fontSize": 13,
               "fontWeight": "bold"
@@ -770,25 +874,40 @@
             {
               "type": "text",
               "id": "GPkhp",
-              "x": 16,
-              "y": 38,
               "name": "sub l1",
               "fill": "#9D174D",
-              "content": "SUBSCRIBE adds the fd; BYE/EOF removes it.",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "SUBSCRIBE adds the fd; BYE/EOF removes it. Up to 32 subscribers, 32 queued messages each.",
+              "lineHeight": 1.4,
               "fontFamily": "Inter",
-              "fontSize": 11,
+              "fontSize": 10,
               "fontWeight": "normal"
             },
             {
               "type": "text",
               "id": "jyWjT",
-              "x": 16,
-              "y": 56,
               "name": "sub l2",
               "fill": "#9D174D",
-              "content": "send() + MSG_NOSIGNAL; failed send → fd dropped",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "The producer only enqueues; the thread that owns the connection is the only one that sends.",
+              "lineHeight": 1.4,
               "fontFamily": "Inter",
-              "fontSize": 9,
+              "fontSize": 10,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "hcqkG",
+              "name": "sub l3",
+              "fill": "#9D174D",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Queue full → shutdown() of the slow subscriber, so UDP ingestion is never blocked.",
+              "lineHeight": 1.4,
+              "fontFamily": "Inter",
+              "fontSize": 10,
               "fontWeight": "normal"
             }
           ]
@@ -799,7 +918,7 @@
           "x": 0,
           "y": 0,
           "name": "udp-reg",
-          "geometry": "M190 306l0 128",
+          "geometry": "M190 355l0 129",
           "viewBox": [
             0,
             0,
@@ -816,7 +935,7 @@
           "type": "path",
           "id": "F6AddH",
           "x": 184,
-          "y": 427,
+          "y": 477,
           "name": "h7",
           "geometry": "M6 13l-6-13 12 0z",
           "viewBox": [
@@ -835,7 +954,7 @@
           "x": 0,
           "y": 0,
           "name": "cli-reg",
-          "geometry": "M550 398l0 36",
+          "geometry": "M550 448l0 36",
           "viewBox": [
             0,
             0,
@@ -852,7 +971,7 @@
           "type": "path",
           "id": "DEo9x",
           "x": 544,
-          "y": 427,
+          "y": 477,
           "name": "h8",
           "geometry": "M6 13l-6-13 12 0z",
           "viewBox": [
@@ -871,7 +990,7 @@
           "x": 0,
           "y": 0,
           "name": "http-reg",
-          "geometry": "M910 306l0 128",
+          "geometry": "M910 355l0 129",
           "viewBox": [
             0,
             0,
@@ -888,7 +1007,7 @@
           "type": "path",
           "id": "uwpy9",
           "x": 904,
-          "y": 427,
+          "y": 477,
           "name": "h9",
           "geometry": "M6 13l-6-13 12 0z",
           "viewBox": [
@@ -907,7 +1026,7 @@
           "x": 0,
           "y": 0,
           "name": "udp-sub",
-          "geometry": "M320 260c40 0 40 220 456 220",
+          "geometry": "M320 300c30 0 35 25 35 60v96c0 11 9 20 20 20h307c11 0 20 6 20 14",
           "viewBox": [
             0,
             0,
@@ -923,28 +1042,28 @@
         {
           "type": "path",
           "id": "cArG3",
-          "x": 767,
-          "y": 474,
+          "x": 696,
+          "y": 477,
           "name": "h10",
-          "geometry": "M13 6l-13 6 0-12z",
+          "geometry": "M6 13l-6-13 12 0z",
           "viewBox": [
             0,
             0,
-            13,
-            12
+            12,
+            13
           ],
           "fill": "#D97706",
-          "width": 13,
-          "height": 12
+          "width": 12,
+          "height": 13
         },
         {
           "type": "text",
           "id": "ZkcIZ",
-          "x": 230,
-          "y": 330,
+          "x": 396,
+          "y": 458,
           "name": "alerts note",
           "fill": "#92400E",
-          "content": "new alerts (outside the mutex)",
+          "content": "enqueues alerts (never sends)",
           "fontFamily": "Inter",
           "fontSize": 10,
           "fontWeight": "normal"
@@ -953,13 +1072,104 @@
           "type": "text",
           "id": "w4hFGc",
           "x": 40,
-          "y": 538,
+          "y": 655,
           "name": "fault",
           "fill": "#475569",
-          "content": "Fault tolerance: signal(SIGPIPE, SIG_IGN) · recv() = 0 or error only ends that thread · invalid message → ERR without closing · invalid datagram → dropped and logged",
+          "textGrowth": "fixed-width",
+          "width": 1020,
+          "content": "Fault tolerance: signal(SIGPIPE, SIG_IGN) · recv() = 0 or error only ends that thread · invalid message → ERR without closing · invalid datagram → dropped and logged · reads and sends have an absolute deadline, so a slow client cannot hold a thread indefinitely",
+          "lineHeight": 1.5,
           "fontFamily": "Inter",
           "fontSize": 11,
           "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "XULlD",
+          "x": 780,
+          "y": 88,
+          "name": "service health",
+          "width": 260,
+          "fill": "#ECFEFF",
+          "cornerRadius": 12,
+          "stroke": "#67E8F9",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A1F",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          },
+          "gap": 10,
+          "padding": [
+            10,
+            12
+          ],
+          "children": [
+            {
+              "type": "icon",
+              "id": "vumkK",
+              "name": "pulse",
+              "width": 18,
+              "height": 18,
+              "icon": "activity",
+              "library": "lucide",
+              "fill": "#0E7490"
+            },
+            {
+              "type": "frame",
+              "id": "xtXFI",
+              "name": "health text",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vrzMR",
+                  "name": "health title",
+                  "fill": "#155E75",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "service_health.c",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "y6nxA3",
+                  "name": "health l1",
+                  "fill": "#0E7490",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "TCP and UDP loops beat every iteration",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "p3NaRX",
+                  "name": "health l2",
+                  "fill": "#0E7490",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "a stalled loop → /status answers 503",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
