@@ -8,4 +8,6 @@ int  subscribers_add(int socket_fd);          /* -1 if there is no room */
 void subscribers_remove(int socket_fd);
 void subscribers_broadcast(const Alert *alert);
 
+int subscribers_drain(int fd);
+long subscribers_dropped(void);
 #endif

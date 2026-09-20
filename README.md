@@ -1,54 +1,83 @@
-# Distributed Telemetry Platform
+# Plataforma de telemetría — TELEP/2.0
 
-Course project for Telematics (Internet: Architecture and Protocols). The goal is a platform
-where simulated IoT nodes report measurements to a central server and operators can query the
-state of the nodes and get alerts when a value goes out of range.
+Servidor C POSIX, nodos y operadores Python 3.8+, TCP propio para control,
+UDP propio para mediciones y HTTP de consulta. No se usa HTTP para sustituir TELEP.
 
-Components:
+## Inicio local (Linux, Ubuntu/WSL)
 
-- central server in C (server/), to be deployed in Docker on AWS EC2
-- telemetry nodes and operator clients in Python, standard library only (client/)
-- a web page to check the server state, served by the server on port 8080
+Requisitos: GCC, Make y Python 3; Tkinter para GUI (`python3-tk` en Ubuntu).
+Desde la raíz del repositorio:
 
-## Running the server
+```bash
+make -C server CFLAGS="-std=gnu11 -Wall -Wextra -Werror -O2 -pthread"
+./server/telemetry_server
+```
 
-    make -C server && ./server/telemetry_server
+En otras terminales:
 
-It listens on 5000/tcp (commands), 5001/udp (telemetry) and 8080/tcp (web). Without the
-Python clients you can try it with netcat:
+```bash
+python3 client/node.py --id NODE01 --host localhost --interval 2
+python3 client/operator_cli.py --host localhost
+python3 client/operator_gui.py --host localhost
+curl --max-time 5 http://localhost:8080/status
+```
 
-    printf 'HELLO|NODE01\nBYE\n' | nc -q1 localhost 5000
-    echo 'TELEMETRY|NODE01|1|TEMP=45.2;HUM=61;STATUS=OK' | nc -u -w0 localhost 5001
-    printf 'GET_STATUS\nGET_ALERTS\nBYE\n' | nc -q1 localhost 5000
-    curl localhost:8080/status
+Puertos: 5000/TCP, 5001/UDP, 8080/TCP. El nombre se configura con `--host`
+o `TELEP_SERVER_HOST`; el valor predeterminado es localhost. No hay IP pública fija
+embebida. Cada nodo genera una sesión UUID. Un ID no puede cambiar de sesión
+hasta reiniciar el servidor; use IDs distintos entre procesos y ejecuciones.
+Reenviar HELLO con la misma sesión no borra datos ni estadísticas.
 
-## Running the server in Docker
+## Pruebas reproducibles
 
-    docker compose up -d --build
-    docker compose logs -f
+No debe haber otro servidor ocupando esos puertos. Los scripts se niegan a
+reutilizar servicios existentes y detienen únicamente sus propios procesos.
 
-The image is built in two stages (gcc to compile, debian-slim to run) and publishes
-5000/tcp, 5001/udp and 8080/tcp. The container restarts on its own if the machine reboots.
+```bash
+python3 tests/run.py
+python3 tests/end_to_end.py --start-server --duration 120
+```
 
-## Running the clients
+La primera orden prueba HTTP, sesiones/estadísticas, errores, alertas, dos
+operadores, suscriptor lento, recuperación y controlador GUI sin pantalla.
+La segunda ejecuta cinco procesos reales de `node.py` y dos conexiones persistentes
+de operador durante al menos 120 segundos, comprueba actividad, alertas y conteos.
+Los resultados reales se escriben en `tests/results/`; no son evidencia de nube,
+Docker, interfaces visuales ni participación individual.
 
-Python 3.8 or newer. The server name comes from --host or the TELEP_SERVER_HOST variable
-(default localhost); the clients resolve it with DNS, there is no IP in the code.
+## DROP y STATS
 
-    ./client/run_nodes.sh 5                          # five simulated nodes in the background
-    python3 client/node.py --id NODE09 --spike TEMP=45   # a node that raises an alert
-    python3 client/operator_cli.py                   # operator, console menu; receives alerts as they happen
-    python3 client/operator_gui.py                   # operator, tkinter window
-    ./client/stop_nodes.sh
+```bash
+python3 client/node.py --host localhost --id DROP01 --count 100 --interval 0.05 --drop 25
+python3 -c 'import sys; sys.path.insert(0,"client"); import telep; print(telep.send_one_request("STATS","DROP01",hostname="localhost"))'
+```
 
-Node options: --interval seconds between measurements, --spike VAR=VALUE to force a value,
---fail-status to report STATUS=FAIL. Thresholds are in server/config.h (TEMP > 40, HUM > 85,
-POWER > 500, VIB > 7).
+DROP=25 omite exactamente 25 de 100 intentos **antes de sendto**. Se esperan
+75 envíos exitosos y, sin pérdida de red, 75 recepciones únicas y pérdida estimada 0.
+La omisión simulada se informa separadamente; no se presenta como pérdida en la red.
+El operador CLI incluye STATS (opción 7) y comandos crudos (opción 6).
 
-The assignment is in docs/Proyecto Telematica 2026-2.pdf. Design so far:
+## Docker y despliegue
 
-- docs/ARCHITECTURE.md - architecture and diagrams
-- docs/PROTOCOL.md - TELEP/1.0, the text protocol between nodes, operators and server
+```bash
+docker compose build --progress plain
+docker compose up -d
+docker compose ps
+curl --max-time 5 http://localhost:8080/status
+```
 
-Ports decided for the protocol: 5001/udp for telemetry, 5000/tcp for commands, 8080/tcp for
-the web page.
+Véanse [DEPLOY](docs/DEPLOY.md), [guía de evidencias](docs/EVIDENCE_GUIDE.md),
+[protocolo](docs/PROTOCOL.md), [arquitectura](docs/ARCHITECTURE.md) y
+[plantilla de informe](docs/REPORT_TEMPLATE.md).
+Los cambios locales no se publican ni despliegan automáticamente. No ejecutar
+scripts remotos hasta tener autorización y un entorno de ensayo apropiado.
+
+## Límites explícitos
+
+TELEP/2 cambia HELLO y TELEMETRY respecto de TELEP/1: actualizar servidor y clientes
+juntos. Estado en memoria, sin autenticación, 64 IDs por proceso, 65536 intentos
+por sesión, hasta 32 suscriptores, 64 clientes TCP y 16 trabajadores HTTP.
+La GUI reintenta tras errores y conserva su ventana; una operación de red aún puede
+ocupar el hilo gráfico hasta el timeout de cinco segundos. Su aspecto visual requiere
+prueba manual. No grabar el video definitivo hasta aprobar las pruebas funcionales 1–4
+(ver guía), y obtener después las evidencias de nube e individuales.

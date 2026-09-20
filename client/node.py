@@ -1,97 +1,132 @@
-"""Simulated telemetry node.
-
-1. Registers with the server over TCP (HELLO|<id>) so it is identified.
-2. Sends periodic measurements over UDP (TELEMETRY|<id>|<seq>|TEMP=..;HUM=..).
-3. Handles SIGINT/SIGTERM so it can be stopped cleanly.
-"""
+"""TELEP/2 node. DROP omits an attempt before sendto, deterministically."""
 import argparse
+import json
+import math
 import random
+import re
 import signal
 import socket
 import sys
 import time
-
+import uuid
 import telep
 
-RECONNECT_DELAY_SECONDS = 3
-
-# Variable -> (mean, standard deviation) of the simulated normal distribution
-SIMULATED_VARIABLES = {
-    "TEMP":  (24.0, 1.5),    # degrees C
-    "HUM":   (60.0, 4.0),    # % relative humidity
-    "POWER": (120.0, 15.0),  # W consumption
-    "VIB":   (0.5, 0.2),     # mm/s vibration
-}
-
+LIMIT = 65536
+SIMULATED_VARIABLES = {"TEMP": (24, 1.5), "HUM": (60, 4), "POWER": (120, 15), "VIB": (0.5, 0.2)}
+RANGES = {"TEMP": (-100, 200), "HUM": (0, 100), "POWER": (0, 1000000), "VIB": (0, 1000)}
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Simulated IoT node (TELEP/1.0)")
-    parser.add_argument("--id", required=True, help="unique identifier, e.g. NODE01")
-    parser.add_argument("--host", default=telep.DEFAULT_HOST, help="server DNS name")
-    parser.add_argument("--interval", type=float, default=2.0, help="seconds between measurements")
-    parser.add_argument("--spike", action="append", default=[], metavar="VAR=VALUE",
-                        help="force a fixed value, e.g. --spike TEMP=45 (raises an alert)")
-    parser.add_argument("--fail-status", action="store_true", help="report STATUS=FAIL")
-    return parser.parse_args()
-
-
-def register_with_retries(node_id, hostname):
-    """Retries HELLO until the server answers; returns the resolved IP."""
-    while True:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--id", required=True)
+    p.add_argument("--host", default=telep.DEFAULT_HOST)
+    p.add_argument("--interval", type=float, default=2)
+    p.add_argument("--count", type=int, default=LIMIT)
+    p.add_argument("--drop", type=float, default=0, help="percentage omitted before send; deterministic schedule")
+    p.add_argument("--dns-refresh", type=float, default=5, help="seconds between DNS/control-plane checks")
+    p.add_argument("--session", default=uuid.uuid4().hex)
+    p.add_argument("--spike", action="append", default=[])
+    p.add_argument("--fail-status", action="store_true")
+    a = p.parse_args()
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,15}", a.id): p.error("invalid ID")
+    if not re.fullmatch(r"[0-9a-f]{32}", a.session): p.error("session needs 32 lowercase hex digits")
+    if not math.isfinite(a.interval) or not 0.01 <= a.interval <= 3600: p.error("interval must be 0.01..3600")
+    if not math.isfinite(a.dns_refresh) or not 1 <= a.dns_refresh <= 3600: p.error("dns-refresh must be 1..3600")
+    if not math.isfinite(a.drop) or not 0 <= a.drop <= 100: p.error("drop must be 0..100")
+    if not 1 <= a.count <= LIMIT: p.error("count must be 1..65536")
+    a.forced = {}
+    for spec in a.spike:
         try:
-            with telep.TelepConnection(hostname) as connection:
-                server_ip = connection.socket.getpeername()[0]
-                reply = connection.request("HELLO", node_id)
-                if reply[0][0] != "OK":
-                    print(f"[{node_id}] registration rejected: {reply[0]}", file=sys.stderr)
-                    sys.exit(1)
-                print(f"[{node_id}] registered at {hostname} ({server_ip}) -> {reply[0]}")
-                return server_ip
-        except (OSError, ConnectionError) as error:
-            print(f"[{node_id}] could not register ({error}); retrying in {RECONNECT_DELAY_SECONDS}s")
-            time.sleep(RECONNECT_DELAY_SECONDS)
-
+            key, value = spec.split("=", 1)
+            key, value = key.upper(), float(value)
+            low, high = RANGES[key]
+            if not math.isfinite(value) or not low <= value <= high: raise ValueError()
+            a.forced[key] = value
+        except (ValueError, KeyError): p.error("invalid spike: " + spec)
+    return a
 
 def take_measurements(forced_values, fail_status):
-    measurements = {name: random.gauss(mean, deviation) for name, (mean, deviation) in SIMULATED_VARIABLES.items()}
-    measurements.update(forced_values)
-    measurements["STATUS"] = "FAIL" if fail_status else "OK"
-    return measurements
+    values = {k: min(RANGES[k][1], max(RANGES[k][0], random.gauss(*params))) for k, params in SIMULATED_VARIABLES.items()}
+    values.update(forced_values)
+    values["STATUS"] = "FAIL" if fail_status else "OK"
+    return values
 
-
-def stop_on_sigterm(*_):
-    """docker stop / kill send SIGTERM: treat it like Ctrl-C."""
-    raise KeyboardInterrupt
-
+def omitted_by_drop(sequence, percentage):
+    return int((sequence + 1) * percentage / 100) > int(sequence * percentage / 100)
 
 def main():
-    sys.stdout.reconfigure(line_buffering=True)   # logs visible even when piped to a file
-    signal.signal(signal.SIGTERM, stop_on_sigterm)
+    sys.stdout.reconfigure(line_buffering=True)
     args = parse_arguments()
-    forced_values = {}
-    for spike in args.spike:
-        name, value = spike.split("=", 1)
-        forced_values[name.upper()] = float(value)
+    signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))
+    counters = dict(attempts=0, sent=0, omitted=0, send_errors=0)
+    boot = None
+    server_ip = None
+    next_refresh = 0
+    total_attempts = 0
+    final_ack = False
 
-    server_ip = register_with_retries(args.id, args.host)
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)     # UDP socket creation
-    sequence = 0
-    try:
-        while True:
-            measurements = take_measurements(forced_values, args.fail_status)
-            datagram = telep.encode_message("TELEMETRY", args.id, sequence, telep.encode_measurements(measurements))
-            try:
-                udp_socket.sendto(datagram, (server_ip, telep.UDP_PORT))  # UDP send
-                print(f"[{args.id}] seq={sequence} {datagram.decode().strip()}")
-            except OSError as error:
-                print(f"[{args.id}] UDP send error: {error}", file=sys.stderr)
-            sequence += 1
-            time.sleep(args.interval)
-    except KeyboardInterrupt:
-        print(f"\n[{args.id}] stopping; datagrams transmitted: {sequence}")
-    finally:
-        udp_socket.close()                                             # close
+    def control(final=False):
+        nonlocal boot, server_ip
+        with telep.TelepConnection(args.host) as c:
+            status = dict(part.split("=", 1) for part in c.request("GET_STATUS")[0][1].split(";"))
+            new_boot = status["boot_id"]
+            if boot is not None and new_boot != boot:
+                print(json.dumps(dict(event="server_restart_previous_session", session=args.session, **counters)))
+                args.session = uuid.uuid4().hex
+                counters.update({k: 0 for k in counters})
+            boot = new_boot
+            answer = c.request("HELLO", args.id, args.session)[0]
+            if answer[0] != "OK": raise RuntimeError("registration rejected: " + "|".join(answer))
+            answer = c.request("REPORT", args.id, args.session, *counters.values(), int(final))[0]
+            if answer[0] != "OK": raise RuntimeError("report rejected: " + "|".join(answer))
+            server_ip = c.socket.getpeername()[0]
+            return True
 
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp:
+        try:
+            while total_attempts < args.count:
+                if time.monotonic() >= next_refresh:
+                    try:
+                        control()
+                        print(json.dumps(dict(event="control", host=args.host, resolved=server_ip, session=args.session, **counters)))
+                        next_refresh = time.monotonic() + args.dns_refresh
+                    except OSError as e:
+                        # Pause attempts while DNS/control plane cannot establish the current session.
+                        print("control unavailable: " + str(e), file=sys.stderr)
+                        time.sleep(1)
+                        continue
+                seq = counters["attempts"]
+                data = telep.encode_message("TELEMETRY", args.id, args.session, seq,
+                    telep.encode_measurements(take_measurements(args.forced, args.fail_status)))
+                if omitted_by_drop(seq, args.drop):
+                    counters["omitted"] += 1
+                else:
+                    try:
+                        if udp.sendto(data, (server_ip, telep.UDP_PORT)) != len(data): raise OSError("short UDP send")
+                        counters["sent"] += 1
+                    except OSError as e:
+                        counters["send_errors"] += 1
+                        next_refresh = 0
+                        print(str(e), file=sys.stderr)
+                counters["attempts"] += 1
+                total_attempts += 1
+                time.sleep(args.interval)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            for _ in range(3):
+                try:
+                    final_ack = control(final=True)
+                    break
+                except (OSError, RuntimeError) as e:
+                    print("final report unavailable: " + str(e), file=sys.stderr)
+                    time.sleep(0.2)
+            print(json.dumps(dict(event="final", id=args.id, session=args.session,
+                                  final_ack=final_ack, **counters)))
+    return 0 if final_ack else 2
 
 if __name__ == "__main__":
-    main()
+    try:
+        sys.exit(main())
+    except RuntimeError as error:
+        print(str(error), file=sys.stderr)
+        sys.exit(2)

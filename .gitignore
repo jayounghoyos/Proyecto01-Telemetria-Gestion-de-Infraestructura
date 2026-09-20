@@ -11,3 +11,11 @@ client/logs/
 
 # SSH keys (AWS Academy labsuser.pem)
 *.pem
+
+# Real captures and personal/manual evidence stay local until reviewed.
+evidence/
+*.pcap
+*.pcapng
+
+# Salidas generadas por tests/run.py y end_to_end.py
+tests/results/local-*/
