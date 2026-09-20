@@ -5,6 +5,10 @@
 
 /* Socket operations shared by the three servers (TCP, UDP, HTTP). */
 
+long monotonic_ms(void);
+int wait_readable(int fd, int timeout_ms);
+int receive_line_until(int fd, char *buffer, size_t capacity, long deadline);
+
 int create_tcp_listener(int port);   /* socket() + bind() + listen(); -1 on failure */
 int create_udp_socket(int port);     /* socket() + bind();            -1 on failure */
 

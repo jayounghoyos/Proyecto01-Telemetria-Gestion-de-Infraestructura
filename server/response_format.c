@@ -1,6 +1,8 @@
 #include "response_format.h"
 #include <stdio.h>
 #include <string.h>
+#include "service_health.h"
+#include "alert_subscribers.h"
 
 char *format_measurements(const TelemetryNode *node, char *out, size_t out_size) {
     size_t written = 0;
@@ -43,12 +45,28 @@ long sum_lost_datagrams(const RegistrySnapshot *snapshot) {
     return total;
 }
 
-char *format_system_status(const RegistrySnapshot *snapshot, char *out, size_t out_size) {
-    time_t now = time(NULL);
-    snprintf(out, out_size,
-             "uptime=%ld;registered=%d;active=%d;udp_rx=%ld;udp_lost=%ld;udp_unknown=%ld;alerts=%d",
-             (long)(now - snapshot->started_at), count_registered_nodes(snapshot),
-             count_active_nodes(snapshot, now), snapshot->datagrams_total,
-             sum_lost_datagrams(snapshot), snapshot->datagrams_unknown_node, snapshot->total_alerts);
+char *format_node_stats(const TelemetryNode *n, char *out, size_t size) {
+    snprintf(out, size,
+        "attempts=%ld;sent=%ld;omitted=%ld;send_errors=%ld;unique=%ld;duplicates=%ld;reordered=%ld;loss_estimated=%ld;report_seen=%d;final_report=%d",
+        n->attempts, n->sent, n->omitted, n->send_errors, n->datagrams_received,
+        n->duplicates, n->reordered, n->datagrams_lost, n->report_seen, n->final_report);
+    return out;
+}
+char *format_system_status(const RegistrySnapshot *s, char *out, size_t size) {
+    long attempts=0, sent=0, omitted=0, errors=0, unique=0, duplicates=0, reordered=0;
+    int reports=0, finals=0;
+    for (int i=0; i<MAX_NODES; i++) {
+        const TelemetryNode *n = &s->nodes[i];
+        if (!n->in_use) continue;
+        attempts+=n->attempts; sent+=n->sent; omitted+=n->omitted; errors+=n->send_errors;
+        unique+=n->datagrams_received; duplicates+=n->duplicates; reordered+=n->reordered;
+        reports+=n->report_seen; finals+=n->final_report;
+    }
+    snprintf(out, size,
+        "boot_id=%ld;uptime=%ld;registered=%d;active=%d;tcp_ok=%d;udp_ok=%d;udp_rx=%ld;udp_invalid=%ld;udp_unknown=%ld;attempts=%ld;sent=%ld;omitted=%ld;send_errors=%ld;unique=%ld;duplicates=%ld;reordered=%ld;loss_estimated=%ld;reports=%d;final_reports=%d;alerts=%d;slow_disconnected=%ld",
+        s->boot_id, (long)(time(NULL)-s->started_at), count_registered_nodes(s), count_active_nodes(s,time(NULL)),
+        service_healthy(0), service_healthy(1), s->datagrams_total, s->datagrams_invalid,
+        s->datagrams_unknown_node, attempts, sent, omitted, errors, unique, duplicates,
+        reordered, sum_lost_datagrams(s), reports, finals, s->total_alerts, subscribers_dropped());
     return out;
 }

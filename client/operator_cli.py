@@ -9,7 +9,7 @@ import time
 import telep
 
 MENU = """
-=== TELEP/1.0 operator ===
+=== TELEP/2.0 operator ===
  1) Registered / active nodes       (GET_NODES)
  2) Last measurements of all nodes  (GET_NODES + GET_LAST)
  3) Query one node                  (GET_LAST|<id>)
@@ -84,7 +84,7 @@ def send_raw_command(connection):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Operator client (TELEP/1.0)")
+    parser = argparse.ArgumentParser(description="Operator client (TELEP/2.0)")
     parser.add_argument("--host", default=telep.DEFAULT_HOST, help="server DNS name")
     parser.add_argument("--port", type=int, default=telep.TCP_PORT)
     args = parser.parse_args()
@@ -96,8 +96,13 @@ def main():
         print(f"could not connect to {args.host}:{args.port}: {error}", file=sys.stderr)
         sys.exit(1)
     print(f"connected to {args.host} ({server_ip}:{args.port})")
-    if connection.subscribe():
-        print("subscribed: new alerts arrive on this connection (ALERT|...)")
+    try:
+        if connection.subscribe():
+            print("subscribed: new alerts arrive on this connection (ALERT|...)")
+    except OSError as error:
+        connection.close()
+        print(f"subscription failed: {error}", file=sys.stderr)
+        return
 
     actions = {
         "1": show_nodes,
@@ -106,6 +111,7 @@ def main():
         "4": show_alerts,
         "5": show_status,
         "6": send_raw_command,
+        "7": lambda c: print(c.request("STATS")),
     }
     try:
         while True:
@@ -124,7 +130,7 @@ def main():
             except (OSError, ConnectionError) as error:
                 print(f"  ! connection lost: {error}", file=sys.stderr)
                 break
-    except (KeyboardInterrupt, EOFError):
+    except (KeyboardInterrupt, EOFError, OSError, ConnectionError, ValueError):
         print()
     finally:
         connection.close()

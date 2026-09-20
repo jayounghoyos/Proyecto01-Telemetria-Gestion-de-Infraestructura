@@ -5,6 +5,9 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <poll.h>
+#include <errno.h>
+#include <time.h>
 
 static int bind_to_port(int socket_fd, int port) {
     struct sockaddr_in local_address;
@@ -42,36 +45,76 @@ int create_udp_socket(int port) {
     return bind_to_port(udp_fd, port);
 }
 
-int send_full_buffer(int socket_fd, const char *buffer, size_t length) {
-    while (length > 0) {
-        ssize_t sent = send(socket_fd, buffer, length, MSG_NOSIGNAL);   /* send */
-        if (sent <= 0) { perror("send"); return -1; }
+long monotonic_ms(void) {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec * 1000L + ts.tv_nsec / 1000000;
+}
+
+int wait_readable(int fd, int timeout_ms) {
+    struct pollfd p = {fd, POLLIN, 0};
+    int result;
+    do { result = poll(&p, 1, timeout_ms); } while (result < 0 && errno == EINTR);
+    return result;
+}
+
+int send_full_buffer(int fd, const char *buffer, size_t length) {
+    long deadline = monotonic_ms() + 1000;
+    while (length) {
+        long remaining = deadline - monotonic_ms();
+        if (remaining <= 0) return -1;
+        struct pollfd p = {fd, POLLOUT, 0};
+        int ready = poll(&p, 1, (int)remaining);
+        if (ready < 0 && errno == EINTR) continue;
+        if (ready <= 0) return -1;
+        ssize_t sent = send(fd, buffer, length, MSG_NOSIGNAL | MSG_DONTWAIT);
+        if (sent < 0 && (errno == EINTR || errno == EAGAIN)) continue;
+        if (sent <= 0) return -1;
         buffer += sent;
         length -= (size_t)sent;
     }
     return 0;
 }
 
-int send_text_line(int socket_fd, const char *text) {
-    if (send_full_buffer(socket_fd, text, strlen(text)) < 0) return -1;
-    return send_full_buffer(socket_fd, "\n", 1);
+/* Exactly one owner thread writes each connection. Assemble newline before sending. */
+int send_text_line(int fd, const char *text) {
+    char frame[MAX_LINE + 1];
+    size_t n = strlen(text);
+    if (n >= MAX_LINE) return -1;
+    memcpy(frame, text, n);
+    frame[n] = '\n';
+    int result = send_full_buffer(fd, frame, n + 1);
+    if (result < 0) shutdown(fd, SHUT_RDWR);
+    return result;
 }
 
-int receive_text_line(int socket_fd, char *buffer, size_t buffer_size) {
-    size_t length = 0;
-    int line_too_long = 0;
+/* Absolute deadline defeats clients sending one byte just before each timeout. */
+int receive_line_until(int fd, char *buffer, size_t capacity, long deadline) {
+    size_t n = 0;
+    int invalid = 0, overflow = 0;
     for (;;) {
-        char received_char;
-        ssize_t count = recv(socket_fd, &received_char, 1, 0);          /* receive byte by byte */
-        if (count == 0) return 0;                                       /* peer closed the connection */
-        if (count < 0)  { perror("recv"); return -1; }
-        if (received_char == '\n') break;
-        if (received_char == '\r') continue;
-        if (length + 1 < buffer_size) buffer[length++] = received_char;
-        else line_too_long = 1;                                         /* keep reading to discard */
+        long remaining = deadline - monotonic_ms();
+        if (remaining <= 0 || wait_readable(fd, (int)remaining) <= 0) return -1;
+        unsigned char c;
+        ssize_t count = recv(fd, &c, 1, MSG_DONTWAIT);
+        if (count < 0 && (errno == EINTR || errno == EAGAIN)) continue;
+        if (count <= 0) return (int)count;
+        if (c == '\n') break;
+        if (c == '\r') { /* CR allowed only immediately before LF */
+            if (n + 1 < capacity) buffer[n++] = (char)c; else overflow = 1;
+            continue;
+        }
+        if (c < 32 || c > 126) invalid = 1;
+        if (n + 1 < capacity) buffer[n++] = (char)c; else overflow = 1;
     }
-    buffer[length] = '\0';
-    return line_too_long ? -2 : (int)length + 1;
+    if (n && buffer[n-1] == '\r') n--;
+    buffer[n] = 0;
+    if (strchr(buffer, '\r')) invalid = 1;
+    return overflow ? -2 : invalid ? -3 : (int)n + 1;
+}
+
+int receive_text_line(int fd, char *buffer, size_t capacity) {
+    return receive_line_until(fd, buffer, capacity, monotonic_ms() + 3000);
 }
 
 const char *describe_peer(const struct sockaddr_in *peer_address, char *out, size_t out_size) {

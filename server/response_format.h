@@ -11,4 +11,5 @@ int   count_registered_nodes(const RegistrySnapshot *snapshot);
 int   count_active_nodes(const RegistrySnapshot *snapshot, time_t now);
 long  sum_lost_datagrams(const RegistrySnapshot *snapshot);
 
+char *format_node_stats(const TelemetryNode *n, char *out, size_t size);
 #endif
