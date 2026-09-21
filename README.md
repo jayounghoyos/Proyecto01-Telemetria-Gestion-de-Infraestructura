@@ -3,6 +3,13 @@
 Servidor C POSIX, nodos y operadores Python 3.8+, TCP propio para control,
 UDP propio para mediciones y HTTP de consulta. No se usa HTTP para sustituir TELEP.
 
+## Informe
+
+El informe técnico del proyecto está en
+**[Informe_Proyecto01_telemetria.pdf](Informe_Proyecto01_telemetria.pdf)**, en la raíz
+del repositorio. Contiene el diseño del protocolo, la arquitectura, el despliegue en AWS,
+el análisis con Wireshark, las pruebas y las evidencias individuales.
+
 ## Inicio local (Linux, Ubuntu/WSL)
 
 Requisitos: GCC, Make y Python 3; Tkinter para GUI (`python3-tk` en Ubuntu).
